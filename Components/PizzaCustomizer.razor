@@ -1,0 +1,164 @@
+@using PizzaOrderApp.Models
+@using PizzaOrderApp.Services
+@inject OrderService OrderService
+
+@if (Pizza == null)
+{
+    <p>Pizza bilgisi yüklenemedi.</p>
+}
+else
+{
+    <div class="pizza-header mb-4">
+        <h2>@Pizza.Name</h2>
+        <p class="text-muted">Başlangıç Fiyatı: @Pizza.BasePrice.ToString("C2")</p>
+    </div>
+
+    <div class="card p-3 mb-4 shadow-sm">
+        <h5 class="card-title">Boyut Seçimi</h5>
+        <div class="d-flex flex-wrap gap-3">
+            @foreach (var size in Pizza.Sizes)
+            {
+                <div class="form-check form-check-inline">
+                    <input type="radio" 
+                           id="size-@size.Id" 
+                           name="pizzaSize" 
+                           class="form-check-input"
+                           checked="@(OrderService.CurrentOrder.SelectedSize?.Id == size.Id)"
+                           @onclick="@(() => HandleSizeSelection(size))" />
+                           
+                    <label class="form-check-label" for="size-@size.Id">
+                        @size.Name 
+                        <span class="text-muted small">(@(size.Multiplier.ToString("0.0"))x)</span>
+                    </label>
+                </div>
+            }
+        </div>
+        @if (OrderService.CurrentOrder.SelectedSize == null)
+        {
+            <div class="alert alert-danger mt-2 p-2 small">Lütfen bir boyut seçimi yapınız.</div>
+        }
+    </div>
+
+    <div class="card p-3 mb-4 shadow-sm">
+        <h5 class="card-title">Malzeme Seçimi</h5>
+
+        <h6>Varsayılan Malzemeler (Fiyat Değişmez)</h6>
+        <ul class="list-unstyled d-flex flex-wrap gap-4">
+            @foreach (var ingredient in Pizza.Ingredients)
+            {
+                <li>
+                    <div class="form-check">
+                        <input class="form-check-input" 
+                               type="checkbox" 
+                               id="ing-@ingredient" 
+                               checked="@(!removedIngredients.Contains(ingredient))"
+                               @onchange="@(e => ToggleIngredientRemoval(ingredient, (bool)e.Value!))" />
+                        <label class="form-check-label" for="ing-@ingredient">
+                            @ingredient
+                        </label>
+                    </div>
+                </li>
+            }
+        </ul>
+
+        <h6>Ekstra Malzemeler (Her biri 10,00 ₺)</h6>
+        <div class="d-flex flex-wrap gap-4 mt-2">
+            @foreach (var topping in AvailableExtraToppings)
+            {
+                <li>
+                    <div class="form-check">
+                        <input class="form-check-input" 
+                               type="checkbox" 
+                               id="top-@topping" 
+                               checked="@OrderService.CurrentOrder.SelectedToppings.Contains(topping)"
+                               @onchange="@(e => ToggleExtraTopping(topping, (bool)e.Value!))" />
+                        <label class="form-check-label" for="top-@topping">
+                            @topping <span class="text-success small">(+10₺)</span>
+                        </label>
+                    </div>
+                </li>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    // 1. Parent'tan gelen veri: Seçilen Pizza (Veri Akışı: Parent -> Child)
+    [Parameter] 
+    public Pizza? Pizza { get; set; }
+    
+    @inject OrderService OrderService
+    
+    private List<string> removedIngredients = new List<string>();
+    private List<string> AvailableExtraToppings = new() { "Mantar", "Zeytin", "Jalapeno Biber", "Ekstra Peynir" };
+    
+    // Bileşen Parametreleri her ayarlandığında çalışır
+    protected override void OnParametersSet()
+    {
+        // Yeni bir pizza seçildiğinde veya sayfa ilk yüklendiğinde çalışır
+        if (Pizza != null && OrderService.CurrentOrder.SelectedPizza?.Id != Pizza.Id)
+        {
+            // Yeni pizzayı OrderService'e kaydet ve başlangıç durumunu ayarla
+            OrderService.CurrentOrder.SelectedPizza = Pizza;
+            
+            // Eğer boyut seçili değilse, varsayılan olarak Küçük boyutu seç
+            if (OrderService.CurrentOrder.SelectedSize == null && Pizza.Sizes.Any())
+            {
+                OrderService.CurrentOrder.SelectedSize = Pizza.Sizes.First();
+            }
+            
+            // Ekstra malzemeleri temizle
+            OrderService.CurrentOrder.SelectedToppings.Clear();
+            removedIngredients.Clear();
+            
+            // Fiyatı güncelle
+            OrderService.UpdateOrder();
+        }
+    }
+
+    // Boyut Seçimini Yönetme
+    private void HandleSizeSelection(PizzaSize size)
+    {
+        // Boyutu güncelle
+        OrderService.CurrentOrder.SelectedSize = size;
+        
+        // Fiyatı ve durumu güncelle
+        OrderService.UpdateOrder();
+    }
+    
+    // Varsayılan Malzemeyi Çıkarma/Ekleme
+    private void ToggleIngredientRemoval(string ingredient, bool isIncluded)
+    {
+        if (isIncluded)
+        {
+            removedIngredients.Remove(ingredient);
+        }
+        else
+        {
+            removedIngredients.Add(ingredient);
+        }
+        // Not: Malzeme çıkarma fiyata etki etmediği için sadece yerel durumu (removedIngredients) güncelliyoruz.
+        // Fiyatın değişmediği durumda OrderService.UpdateOrder()'ı çağırmaya gerek yoktur.
+    }
+    
+    // Ekstra Malzeme Ekleme/Çıkarma (Fiyatı Etkiler)
+    private void ToggleExtraTopping(string topping, bool isChecked)
+    {
+        if (isChecked)
+        {
+            // Ekle
+            if (!OrderService.CurrentOrder.SelectedToppings.Contains(topping))
+            {
+                OrderService.CurrentOrder.SelectedToppings.Add(topping);
+            }
+        }
+        else
+        {
+            // Çıkar
+            OrderService.CurrentOrder.SelectedToppings.Remove(topping);
+        }
+
+        // Fiyatı ve durumu güncelle (Bu, OrderService.OnOrderStateChanged olayını tetikler)
+        OrderService.UpdateOrder();
+    }
+}
