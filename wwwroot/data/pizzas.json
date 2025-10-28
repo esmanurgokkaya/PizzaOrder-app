@@ -1,0 +1,122 @@
+[
+  {
+    "id": "1",
+    "name": "Margherita Klasik",
+    "basePrice": 120.00,
+    "imageUrl": "images/margherita.jpg",
+    "ingredients": ["Mozzarella", "Domates Sosu", "Fesleğen"],
+    "sizes": [
+      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
+      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
+      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Pepperoni Ateşi",
+    "basePrice": 140.00,
+    "imageUrl": "images/pepperoni.jpg",
+    "ingredients": ["Mozzarella", "Domates Sosu", "Pepperoni"],
+    "sizes": [
+      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
+      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
+      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Sebze Rüyası",
+    "basePrice": 130.00,
+    "imageUrl": "images/sebze.jpg",
+    "ingredients": ["Mozzarella", "Domates Sosu", "Mantar", "Biber", "Soğan"],
+    "sizes": [
+      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
+      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
+      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Dört Peynirli",
+    "basePrice": 150.00,
+    "imageUrl": "images/dortpeynir.jpg",
+    "ingredients": ["Mozzarella", "Cheddar", "Gorgonzola", "Parmesan"],
+    "sizes": [
+      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
+      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
+      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "Tavuklu BBQ",
+    "basePrice": 160.00,
+    "imageUrl": "images/bbq.jpg",
+    "ingredients": ["Mozzarella", "BBQ Sos", "Izgara Tavuk", "Kırmızı Biber"],
+    "sizes": [
+      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
+      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
+      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    ]
+  },
+  {
+    "id": "6",
+    "name": "Sucuk Şöleni",
+    "basePrice": 145.00,
+    "imageUrl": "images/sucuk.jpg",
+    "ingredients": ["Mozzarella", "Domates Sosu", "Sucuk", "Yeşil Biber"],
+    "sizes": [
+      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
+      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
+      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    ]
+  },
+  {
+    "id": "7",
+    "name": "Meksika Acısı",
+    "basePrice": 155.00,
+    "imageUrl": "images/mexican.jpg",
+    "ingredients": ["Mozzarella", "Acı Sos", "Jalapeno", "Kıyma", "Mısır"],
+    "sizes": [
+      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
+      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
+      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    ]
+  },
+  {
+    "id": "8",
+    "name": "Ton Balıklı",
+    "basePrice": 135.00,
+    "imageUrl": "images/tuna.jpg",
+    "ingredients": ["Mozzarella", "Domates Sosu", "Ton Balığı", "Soğan", "Zeytin"],
+    "sizes": [
+      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
+      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
+      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    ]
+  },
+  {
+    "id": "9",
+    "name": "Akdeniz",
+    "basePrice": 140.00,
+    "imageUrl": "images/akdeniz.jpg",
+    "ingredients": ["Mozzarella", "Domates Sosu", "Beyaz Peynir", "Kekik", "Domates"],
+    "sizes": [
+      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
+      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
+      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    ]
+  },
+  {
+    "id": "10",
+    "name": "Kavurmalı",
+    "basePrice": 180.00,
+    "imageUrl": "images/kavurma.jpg",
+    "ingredients": ["Mozzarella", "Domates Sosu", "Kavurma", "Mantar"],
+    "sizes": [
+      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
+      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
+      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    ]
+  }
+]
