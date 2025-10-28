@@ -1,36 +1,22 @@
-@using PizzaOrderApp.Models
-@using PizzaOrderApp.Services
+@using PizzaOrderApp.Models // Models namespace'i gerekli
+@using PizzaOrderApp.Services // Services namespace'i gerekli
+@namespace PizzaOrderApp.Components
 @inject OrderService OrderService
-@implements IDisposable // Kaynakları serbest bırakmak için IDisposable arayüzünü uyguluyoruz
+@implements IDisposable 
+@inject NavigationManager NavManager
 
 <div class="card shadow-sm order-summary-card">
+    @* --- Geri kalan HTML ve @code bloğu önceki hatasız sürümdeki gibi --- *@
     <div class="card-header bg-warning text-dark">
         <h5 class="mb-0">🛒 Sipariş Özeti</h5>
     </div>
     <div class="card-body">
-        
         @if (OrderService.CurrentOrder.SelectedPizza != null)
         {
             <h6>@OrderService.CurrentOrder.SelectedPizza.Name</h6>
-            
             <ul class="list-unstyled small">
-                <li>
-                    <strong>Boyut:</strong> 
-                    @OrderService.CurrentOrder.SelectedSize?.Name 
-                    (@(OrderService.CurrentOrder.SelectedSize?.Multiplier.ToString("0.0"))x)
-                </li>
-                
-                <li>
-                    <strong>Ek Malzemeler:</strong> 
-                    @if (OrderService.CurrentOrder.SelectedToppings.Any())
-                    {
-                        <span>@OrderService.CurrentOrder.SelectedToppings.Count adet (+@((OrderService.CurrentOrder.SelectedToppings.Count * 10).ToString("C2")) )</span>
-                    }
-                    else
-                    {
-                        <span>Yok</span>
-                    }
-                </li>
+                <li><strong>Boyut:</strong> @OrderService.CurrentOrder.SelectedSize?.Name</li>
+                <li><strong>Ek Malzemeler:</strong> @(OrderService.CurrentOrder.SelectedToppings.Count > 0 ? $"{OrderService.CurrentOrder.SelectedToppings.Count} adet" : "Yok")</li>
             </ul>
         }
         else
@@ -49,37 +35,28 @@
     <div class="p-3">
         <button class="btn btn-lg btn-success w-100" 
                 @onclick="GoToCheckout"
-                disabled="@(OrderService.CurrentOrder.SelectedPizza == null)">
+                disabled="@(OrderService.CurrentOrder.SelectedSize == null)">
             Siparişi Tamamla (@OrderService.CurrentOrder.TotalPrice.ToString("C2"))
         </button>
     </div>
 </div>
 
 @code {
-    @inject NavigationManager NavManager
-    
     protected override void OnInitialized()
     {
-        // 1. Abonelik: Bileşen başlatıldığında, OrderService'teki olaylara abone ol.
-        // Bu, OrderService.UpdateOrder() çağrıldığında bu bileşenin NotifyStateChanged() metodunu çalıştırır.
         OrderService.OnOrderStateChanged += OnOrderUpdated; 
     }
 
-    // Olay Geri Çağrımı: OrderService durumu güncellediğinde çalışır.
     private void OnOrderUpdated()
     {
-        // 2. Arayüz Güncelleme: Durum değiştiğinde Blazor'a arayüzü yeniden çizmesini söyle.
-        // Bu sayede TotalPrice anlık olarak güncellenir.
-        StateHasChanged(); 
+        InvokeAsync(StateHasChanged); // StateHasChanged'i InvokeAsync ile çağırmak daha güvenlidir.
     }
 
-    // Programatik Yönlendirme (Ders3: Navigation Manager)
     private void GoToCheckout()
     {
         NavManager.NavigateTo("/checkout");
     }
 
-    // 3. Abonelikten Çıkma (Temizlik): Bileşen bellekten kaldırılırken kaynakları serbest bırak. (Bellek sızıntısını önler)
     public void Dispose()
     {
         OrderService.OnOrderStateChanged -= OnOrderUpdated;

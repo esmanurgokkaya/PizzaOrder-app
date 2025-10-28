@@ -1,0 +1,36 @@
+/* Pizza kartlarının ve başlığın stilini ayarlar */
+.pizza-list-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 1rem;
+    background-color: #f8f9fa; /* Açık gri arkaplan */
+    border-radius: 8px;
+}
+
+.pizza-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid #dee2e6; /* Hafif çerçeve */
+}
+
+.pizza-card:hover {
+    transform: translateY(-5px); /* Kartı yukarı kaldır */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Daha belirgin gölge */
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover; /* Resmin orantısını koruyarak sığdır */
+}
+
+.price-tag {
+    color: #28a745; /* Yeşil fiyat etiketi */
+    font-weight: bold;
+}
+
+/* Yükleme animasyonu için basit stil */
+.loading-indicator {
+    text-align: center;
+    padding: 2rem;
+    font-style: italic;
+    color: #6c757d;
+}

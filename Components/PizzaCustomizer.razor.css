@@ -1,0 +1,20 @@
+/* Bileşen içindeki kart başlıkları */
+.card-title {
+    color: #0056b3; /* Koyu mavi başlık */
+    border-bottom: 1px dashed #ced4da;
+    padding-bottom: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Malzeme listeleri için daha iyi hizalama */
+.form-check {
+    margin-bottom: 0.5rem;
+}
+
+.gap-3 {
+    gap: 1rem !important; /*Bootstrap 5 gap utility */
+}
+
+.gap-4 {
+    gap: 1.5rem !important; /*Bootstrap 5 gap utility */
+}

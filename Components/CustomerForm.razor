@@ -1,0 +1,81 @@
+@namespace PizzaOrderApp.Components
+@using PizzaOrderApp.Models // Models namespace'i
+@using PizzaOrderApp.Services // Services namespace'i
+@inject OrderService OrderService
+@inject NavigationManager NavManager
+
+<div class="card p-4 shadow-lg customer-form-card">
+    <h4 class="mb-4">Teslimat Bilgileri</h4>
+
+    @if (isSubmitting)
+    {
+        <div class="alert alert-info">Siparişiniz işleniyor, lütfen bekleyin...</div>
+    }
+
+    <EditForm Model="@OrderService.CurrentOrder.CustomerInfo" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        @* --- İsim, E-posta, Adres InputText ve ValidationMessage alanları burada --- *@
+        @* (Önceki kodla aynı, değişiklik yok) *@
+        <div class="mb-3">
+            <label for="name" class="form-label">Ad Soyad</label>
+            <InputText id="name" 
+                       class="form-control" 
+                       @bind-Value="OrderService.CurrentOrder.CustomerInfo.Name" />
+            <ValidationMessage For="@(() => OrderService.CurrentOrder.CustomerInfo.Name)" />
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">E-posta</label>
+            <InputText id="email" 
+                       type="email" 
+                       class="form-control" 
+                       @bind-Value="OrderService.CurrentOrder.CustomerInfo.Email" />
+            <ValidationMessage For="@(() => OrderService.CurrentOrder.CustomerInfo.Email)" />
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label">Teslimat Adresi</label>
+            <InputTextArea id="address" 
+                           class="form-control" 
+                           rows="3"
+                           @bind-Value="OrderService.CurrentOrder.CustomerInfo.Address" />
+            <ValidationMessage For="@(() => OrderService.CurrentOrder.CustomerInfo.Address)" />
+        </div>
+        
+        @* --- Gönderme Butonu --- *@
+        <button type="submit" 
+                class="btn btn-primary btn-lg w-100 mt-3"
+                disabled="@isSubmitting"> @* Gönderim sırasında butonu devre dışı bırak *@
+            Siparişi Onayla ve Öde
+        </button>
+    </EditForm>
+</div>
+
+@code {
+    private bool isSubmitting = false; // Formun tekrar tekrar gönderilmesini engelle
+
+    // OnValidSubmit: Form geçerli olduğunda çalışır (Issue P-404)
+    private async Task HandleValidSubmit()
+    {
+        // Tekrar gönderimi engelle
+        if (isSubmitting) return; 
+        isSubmitting = true;
+        // Kullanıcıya işlem yapıldığını göstermek için arayüzü güncelle
+        StateHasChanged(); 
+
+        // 1. Sipariş Numarası Üretme
+        // Örnek Format: PZ-YYYYMMDD-RASTGELESAYI
+        var orderNumber = $"PZ-{DateTime.Now.ToString("yyyyMMdd")}-{new Random().Next(1000, 9999)}";
+        OrderService.CurrentOrder.OrderNumber = orderNumber; // Üretilen numarayı Order nesnesine ata
+
+        // 2. OrderService ile siparişi kalıcı kaydetme (localStorage'a)
+        // OrderService'teki SaveOrderToLocalStorageAsync metodu çağrılır.
+        await OrderService.SaveOrderToLocalStorageAsync();
+
+        // 3. Kullanıcıyı onay sayfasına yönlendirme
+        // Sipariş numarasını URL'ye ekleyerek yönlendirme yapılır.
+        NavManager.NavigateTo($"/confirmation/{orderNumber}");
+
+        // isSubmitting = false; // Yönlendirme olduğu için genellikle gerek yok
+    }
+}

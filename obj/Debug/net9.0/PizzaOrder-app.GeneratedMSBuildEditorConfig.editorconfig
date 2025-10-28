@@ -28,37 +28,25 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/esman/2025 Projects/PizzaOrder-app/Components/CustomerForm.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDdXN0b21lckZvcm0ucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/esman/2025 Projects/PizzaOrder-app/Components/OrderSummary.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xPcmRlclN1bW1hcnkucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/esman/2025 Projects/PizzaOrder-app/Components/PizzaCustomizer.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQaXp6YUN1c3RvbWl6ZXIucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/esman/2025 Projects/PizzaOrder-app/Pages/Checkout.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2hlY2tvdXQucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/esman/2025 Projects/PizzaOrder-app/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/esman/2025 Projects/PizzaOrder-app/Pages/PizzaDetail.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGl6emFEZXRhaWwucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/esman/2025 Projects/PizzaOrder-app/Pages/PizzaList.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGl6emFMaXN0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/esman/2025 Projects/PizzaOrder-app/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/esman/2025 Projects/PizzaOrder-app/Components/CustomerForm.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDdXN0b21lckZvcm0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-j6ckbhrz9o
+
+[C:/Users/esman/2025 Projects/PizzaOrder-app/Components/OrderSummary.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xPcmRlclN1bW1hcnkucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-axy4bur15s
+
+[C:/Users/esman/2025 Projects/PizzaOrder-app/Components/PizzaCustomizer.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQaXp6YUN1c3RvbWl6ZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-gcbe1z6nid
 
 [C:/Users/esman/2025 Projects/PizzaOrder-app/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
@@ -67,3 +55,19 @@ build_metadata.AdditionalFiles.CssScope = b-hv6x1wj7qp
 [C:/Users/esman/2025 Projects/PizzaOrder-app/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-g7xvvednop
+
+[C:/Users/esman/2025 Projects/PizzaOrder-app/Pages/Checkout.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2hlY2tvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-1wseqlopqq
+
+[C:/Users/esman/2025 Projects/PizzaOrder-app/Pages/OrderConfirmation.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcT3JkZXJDb25maXJtYXRpb24ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-xgolypgv69
+
+[C:/Users/esman/2025 Projects/PizzaOrder-app/Pages/PizzaDetail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGl6emFEZXRhaWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-cwkjuy18ha
+
+[C:/Users/esman/2025 Projects/PizzaOrder-app/Pages/PizzaList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGl6emFMaXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-6pzvvsl6ja
