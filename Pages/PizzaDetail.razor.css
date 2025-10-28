@@ -1,11 +1,18 @@
 /* Sayfanın genel konteynerine biraz üst boşluk ekler */
 .container {
-    padding-top: 2rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
 }
 
 /* Sağdaki sipariş özeti sütununun hizalaması (mobil için) */
 @media (max-width: 991.98px) {
-    .col-lg-4 {
-        margin-top: 1.5rem; /* Küçük ekranlarda özetin altına boşluk ekle */
+    .col-lg-5 {
+        margin-top: 1.25rem; /* Küçük ekranlarda özetin altına boşluk ekle */
     }
+}
+
+/* Make pizza customizer and summary cards align visually */
+.row.g-4 { align-items: start; }
+@media (min-width: 992px) {
+    .col-lg-7 .card, .col-lg-5 .card, .order-summary-card { height: 100%; }
 }

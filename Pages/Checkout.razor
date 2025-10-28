@@ -1,6 +1,6 @@
-@page "/checkout"
-@using PizzaOrderApp.Services 
-@using PizzaOrderApp.Components 
+@page "/checkout" // EKLENDİ
+@using PizzaOrderApp.Services
+@using PizzaOrderApp.Components
 @inject OrderService OrderService
 @inject NavigationManager NavManager
 
@@ -8,7 +8,7 @@
 
 <div class="container mt-5 checkout-page">
     <h3 class="mb-4">Sipariş Tamamlama ve Ödeme</h3>
-    
+
     @if (OrderService.CurrentOrder.SelectedPizza == null || OrderService.CurrentOrder.SelectedSize == null)
     {
         <div class="alert alert-danger" role="alert">
@@ -21,13 +21,12 @@
     }
     else
     {
-        <div class="row g-5"> 
+        <div class="row g-5">
             <div class="col-lg-7 order-lg-1">
-                <CustomerForm /> @* Artık tanınıyor *@
+                <CustomerForm />
             </div>
-            
             <div class="col-lg-5 order-lg-2">
-                <OrderSummary /> @* Artık tanınıyor *@
+                <OrderSummary />
             </div>
         </div>
     }

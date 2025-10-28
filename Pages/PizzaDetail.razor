@@ -1,38 +1,52 @@
 @page "/pizzas/{Id}"
-@using PizzaOrderApp.Models
-@using PizzaOrderApp.Services
+@* @using PizzaOrder_app.Models - _Imports.razor'da var *@
+@* @using PizzaOrder_app.Services - _Imports.razor'da var *@
+@* @using PizzaOrder_app.Components - _Imports.razor'da var *@
 @inject PizzaService PizzaService
 
-<PageTitle>Özelleştirme</PageTitle>
+<PageTitle>Özelleştirme - @selectedPizza?.Name</PageTitle>
 
-@* Rota parametresini yakalama *@
 @code {
     [Parameter]
     public string Id { get; set; } = string.Empty;
-    
+
     private Pizza? selectedPizza;
-    
+
+    // Parametre değiştiğinde veya sayfa ilk yüklendiğinde pizzayı yükle
     protected override async Task OnParametersSetAsync()
     {
-        // PizzaService'i kullanarak ID'ye göre pizzayı bul
-        // Not: PizzaService verileri önceden yüklemiş olmalıdır.
-        var allPizzas = await PizzaService.GetPizzasAsync();
-        selectedPizza = allPizzas.FirstOrDefault(p => p.Id == Id);
+        if (!string.IsNullOrEmpty(Id))
+        {
+            selectedPizza = await PizzaService.GetPizzaByIdAsync(Id);
+        }
+        else
+        {
+             selectedPizza = null; // ID yoksa temizle
+        }
     }
 }
 
-<div class="container mt-5">
+<div class="container mt-4">
     @if (selectedPizza == null)
     {
-        <p class="alert alert-danger">Pizza bulunamadı veya veriler yükleniyor...</p>
+        @if (string.IsNullOrEmpty(Id))
+        {
+             <p class="alert alert-warning">Lütfen menüden bir pizza seçin.</p>
+        }
+        else
+        {
+             <p class="alert alert-danger">Pizza bulunamadı (ID: @Id) veya veriler yükleniyor...</p>
+        }
     }
     else
     {
-        <div class="row">
-            <div class="col-lg-8">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                @* Pizza özelleştirme bileşeni, seçilen pizzayı parametre olarak alır *@
                 <PizzaCustomizer Pizza="selectedPizza" />
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-5">
+                @* Sipariş özeti bileşeni *@
                 <OrderSummary />
             </div>
         </div>

@@ -1,13 +1,12 @@
-@using PizzaOrderApp.Models // Models namespace'i gerekli
-@using PizzaOrderApp.Services // Services namespace'i gerekli
+@* @using PizzaOrder_app.Models - _Imports.razor'da var *@
+@* @using PizzaOrder_app.Services - _Imports.razor'da var *@
 @namespace PizzaOrderApp.Components
 @inject OrderService OrderService
-@implements IDisposable 
+@implements IDisposable
 @inject NavigationManager NavManager
 
 <div class="card shadow-sm order-summary-card">
-    @* --- Geri kalan HTML ve @code bloğu önceki hatasız sürümdeki gibi --- *@
-    <div class="card-header bg-warning text-dark">
+    <div class="card-header summary-header">
         <h5 class="mb-0">🛒 Sipariş Özeti</h5>
     </div>
     <div class="card-body">
@@ -15,50 +14,43 @@
         {
             <h6>@OrderService.CurrentOrder.SelectedPizza.Name</h6>
             <ul class="list-unstyled small">
-                <li><strong>Boyut:</strong> @OrderService.CurrentOrder.SelectedSize?.Name</li>
-                <li><strong>Ek Malzemeler:</strong> @(OrderService.CurrentOrder.SelectedToppings.Count > 0 ? $"{OrderService.CurrentOrder.SelectedToppings.Count} adet" : "Yok")</li>
+                <li><strong>Boyut:</strong> @(OrderService.CurrentOrder.SelectedSize?.Name ?? "Seçilmedi")</li>
+                <li><strong>Ek Malzemeler:</strong> @(OrderService.CurrentOrder.SelectedToppings.Any() ? $"{OrderService.CurrentOrder.SelectedToppings.Count} adet (+{(OrderService.CurrentOrder.SelectedToppings.Count * 10).ToString("C2")})" : "Yok")</li>
             </ul>
         }
         else
-        {
-            <p class="text-muted">Lütfen menüden bir pizza seçimi yapın.</p>
-        }
+        { <p class="text-muted">Lütfen menüden bir pizza seçin.</p> }
     </div>
-
-    <div class="card-footer d-flex justify-content-between align-items-center bg-light">
-        <span class="h5 mb-0">Toplam Tutar:</span>
-        <span class="total-price h4 mb-0 text-success">
-            @OrderService.CurrentOrder.TotalPrice.ToString("C2")
-        </span>
+    <div class="card-footer d-flex justify-content-between align-items-center summary-footer">
+        <span class="h6 mb-0">Toplam Tutar:</span>
+        <span class="total-price h4 mb-0">@OrderService.CurrentOrder.TotalPrice.ToString("C2")</span>
     </div>
-
-    <div class="p-3">
-        <button class="btn btn-lg btn-success w-100" 
-                @onclick="GoToCheckout"
-                disabled="@(OrderService.CurrentOrder.SelectedSize == null)">
-            Siparişi Tamamla (@OrderService.CurrentOrder.TotalPrice.ToString("C2"))
-        </button>
-    </div>
+    @* Show a small checkout link/button when the user is not currently on the checkout page.
+       This prevents a duplicate large button on the checkout page while still allowing
+       users to navigate there from previews (e.g. pizza details). *@
+    @if (!NavManager.Uri.EndsWith("/checkout", StringComparison.OrdinalIgnoreCase))
+    {
+        <div class="p-3">
+            <button class="btn btn-primary w-100"
+                    @onclick="GoToCheckout"
+                    disabled="@(OrderService.CurrentOrder.SelectedSize == null)"
+                    aria-label="Ödemeye git">
+                Ödemeye Git
+            </button>
+        </div>
+    }
 </div>
 
 @code {
     protected override void OnInitialized()
-    {
-        OrderService.OnOrderStateChanged += OnOrderUpdated; 
-    }
+    { OrderService.OnOrderStateChanged += OnOrderUpdated; }
 
     private void OnOrderUpdated()
-    {
-        InvokeAsync(StateHasChanged); // StateHasChanged'i InvokeAsync ile çağırmak daha güvenlidir.
-    }
+    { InvokeAsync(StateHasChanged); } // Güncelleme için InvokeAsync kullanmak daha güvenli
 
     private void GoToCheckout()
-    {
-        NavManager.NavigateTo("/checkout");
-    }
+    { NavManager.NavigateTo("/checkout"); }
 
-    public void Dispose()
-    {
-        OrderService.OnOrderStateChanged -= OnOrderUpdated;
-    }
+    public void Dispose() // Bellek sızıntısını önler
+    { OrderService.OnOrderStateChanged -= OnOrderUpdated; }
 }

@@ -1,22 +1,22 @@
-// Program.cs
-
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using PizzaOrderApp.Services; // Servislerinizin bulunduğu ad alanı (Bunu eklemeyi unutmayın!)
+using PizzaOrderApp; // App component namespace
+using PizzaOrderApp.Services; // Ad alanını kontrol edin
 using System;
 using System.Net.Http;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-// ... (Mevcut kodlar ve diğer varsayılan servis kayıtları) ...
+// Root components: mount the app into #app and enable HeadOutlet
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
 
-// HttpClient'ı yapılandırma (Statik JSON dosyalarını okumak için gereklidir)
+// HttpClient kaydı
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-// 1. PizzaService Kaydı (Singleton - Veri bir kez yüklenir ve uygulama boyunca aynı kalır)
-builder.Services.AddSingleton<PizzaService>();
-
-// 2. OrderService Kaydı (Scoped - Durum yönetimi için gereklidir. Oturum boyunca aynı Order nesnesi kullanılır.)
-builder.Services.AddScoped<OrderService>();
-
+// Servis Kayıtları
+// PizzaService depends on HttpClient (scoped), so it must not be registered as a singleton.
+builder.Services.AddScoped<PizzaService>(); // Veri tek sefer yüklenecek (scoped to allow HttpClient injection)
+builder.Services.AddScoped<OrderService>(); // Sipariş durumu oturum boyunca saklanacak
 
 await builder.Build().RunAsync();
