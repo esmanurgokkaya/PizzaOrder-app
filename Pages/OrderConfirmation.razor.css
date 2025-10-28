@@ -1,0 +1,10 @@
+/* Onay kutusunun stili */
+.confirmation-box {
+    border-top: 5px solid #28a745; /* Üstte yeşil çizgi */
+    background-color: #e9f7ef; /* Çok açık yeşil arkaplan */
+}
+
+/* Sipariş numarası rozeti */
+.badge {
+    font-size: 1.5rem; /* Daha büyük sipariş numarası */
+}

@@ -1,0 +1,17 @@
+/* Sipariş özeti kartının kenarlığı */
+.order-summary-card {
+    border: 2px solid #ffc107; /* Sarı kenarlık */
+    position: sticky; /* Sayfada aşağı kaydırınca sabit kalır (opsiyonel) */
+    top: 20px; /* Üstten boşluk */
+}
+
+/* Toplam fiyatın vurgulanması */
+.total-price {
+    font-weight: bold;
+    font-size: 1.4rem; /* Fiyatı büyüt */
+}
+
+/* Kart başlığı */
+.card-header h5 {
+    font-weight: 600;
+}

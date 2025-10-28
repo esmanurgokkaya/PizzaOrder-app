@@ -1,0 +1,11 @@
+/* Checkout sayfasının genel yapısı */
+.container {
+    padding-top: 2rem;
+}
+
+/* Hata mesajı için stil */
+.alert-danger a {
+    color: #721c24; /* Hata mesajındaki link rengi */
+    font-weight: bold;
+    text-decoration: underline;
+}

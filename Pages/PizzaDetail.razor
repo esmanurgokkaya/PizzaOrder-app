@@ -1,0 +1,40 @@
+@page "/pizzas/{Id}"
+@using PizzaOrderApp.Models
+@using PizzaOrderApp.Services
+@inject PizzaService PizzaService
+
+<PageTitle>Özelleştirme</PageTitle>
+
+@* Rota parametresini yakalama *@
+@code {
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+    
+    private Pizza? selectedPizza;
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        // PizzaService'i kullanarak ID'ye göre pizzayı bul
+        // Not: PizzaService verileri önceden yüklemiş olmalıdır.
+        var allPizzas = await PizzaService.GetPizzasAsync();
+        selectedPizza = allPizzas.FirstOrDefault(p => p.Id == Id);
+    }
+}
+
+<div class="container mt-5">
+    @if (selectedPizza == null)
+    {
+        <p class="alert alert-danger">Pizza bulunamadı veya veriler yükleniyor...</p>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                <PizzaCustomizer Pizza="selectedPizza" />
+            </div>
+            <div class="col-lg-4">
+                <OrderSummary />
+            </div>
+        </div>
+    }
+</div>
