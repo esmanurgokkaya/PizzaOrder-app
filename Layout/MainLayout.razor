@@ -1,15 +1,18 @@
-﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+﻿
+@namespace PizzaOrderApp.Layout
+@inherits LayoutComponentBase
+<div class="app-container">
+    <header class="app-header px-4">
+        <div class="container-fluid d-flex align-items-center">
+            <a class="brand" href="/">PizzaOrder</a>
+            <nav class="ms-auto" aria-label="site-links">
+                <!-- kept empty on purpose: app uses pages and direct links -->
+            </nav>
         </div>
+    </header>
 
-        <article class="content px-4">
+    <main class="container">
+        <article class="content py-4">
             @Body
         </article>
     </main>

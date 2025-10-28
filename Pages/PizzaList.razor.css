@@ -23,8 +23,8 @@
 }
 
 .price-tag {
-    color: #28a745; /* Yeşil fiyat etiketi */
-    font-weight: bold;
+    color: var(--pizza-basil); /* Yeşil fiyat etiketi */
+    font-weight: 700;
 }
 
 /* Yükleme animasyonu için basit stil */
@@ -33,4 +33,65 @@
     padding: 2rem;
     font-style: italic;
     color: #6c757d;
+}
+
+/* Accessibility: focus-visible for keyboard users */
+.card:focus-visible, .btn:focus-visible, .nav-link:focus-visible {
+    outline: 3px solid #ffd54f;
+    outline-offset: 2px;
+}
+
+/* Responsive tweaks: make the card image height adapt on small screens */
+.card-img-top {
+    height: 220px;
+}
+
+@media (max-width: 576px) {
+    .card-img-top {
+        height: 160px;
+    }
+
+    .pizza-list-header {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .price-tag {
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-img-top {
+        height: 220px;
+    }
+}
+
+/* Ensure card buttons are accessible and full-width when needed */
+.pizza-card .btn {
+    min-width: 140px;
+}
+
+/* Card footer layout */
+.pizza-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.pizza-list-header {
+    background-color: var(--pizza-cream);
+    border-radius: 8px;
+    padding: 0.9rem 1.25rem;
+    margin-top: 0.5rem;
+}
+
+/* Ensure card heights are visually consistent */
+.pizza-card .card {
+    min-height: 460px;
+}
+
+@media (max-width: 768px) {
+    .card-img-top { height: 160px; }
+    .pizza-card .card { min-height: auto; }
+    .pizza-list-header { padding: 0.75rem; }
 }

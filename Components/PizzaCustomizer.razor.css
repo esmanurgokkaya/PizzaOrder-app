@@ -1,14 +1,16 @@
 /* Bileşen içindeki kart başlıkları */
 .card-title {
-    color: #0056b3; /* Koyu mavi başlık */
-    border-bottom: 1px dashed #ced4da;
+    color: var(--pizza-accent);
+    border-bottom: 1px dashed rgba(139,69,19,0.12);
     padding-bottom: 8px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 /* Malzeme listeleri için daha iyi hizalama */
 .form-check {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
+    display: inline-flex;
+    align-items: center;
 }
 
 .gap-3 {
@@ -17,4 +19,31 @@
 
 .gap-4 {
     gap: 1.5rem !important; /*Bootstrap 5 gap utility */
+}
+
+/* Chip style for ingredients/toppings */
+.ingredient-chips .chip, .extra-chips .chip {
+    background: var(--pizza-card-bg);
+    border: 1px solid rgba(139,69,19,0.06);
+    padding: 0.4rem 0.6rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ingredient-chips .form-check-input, .extra-chips .form-check-input {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+}
+
+.ingredient-chips .form-check-label, .extra-chips .form-check-label {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--pizza-text);
+}
+
+@media (max-width: 576px) {
+    .ingredient-chips .chip, .extra-chips .chip { padding: 0.35rem 0.5rem; }
 }

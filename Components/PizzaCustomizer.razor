@@ -1,13 +1,10 @@
-@using PizzaOrderApp.Models // Models namespace'i gerekli
-@using PizzaOrderApp.Services // Services namespace'i gerekli
+@* @using PizzaOrder_app.Models - _Imports.razor'da var *@
+@* @using PizzaOrder_app.Services - _Imports.razor'da var *@
 @namespace PizzaOrderApp.Components
 @inject OrderService OrderService
 
-@* --- Geri kalan HTML ve @code bloğu önceki hatasız sürümdeki gibi --- *@
 @if (Pizza == null)
-{
-    <p>Pizza bilgisi yüklenemedi.</p>
-}
+{ <p>Pizza seçimi bekleniyor...</p> }
 else
 {
     <div class="pizza-header mb-4">
@@ -21,119 +18,98 @@ else
              @foreach (var size in Pizza.Sizes)
              {
                  <div class="form-check form-check-inline">
-                     <input type="radio" 
-                            id="size-@size.Id" 
-                            name="pizzaSize" 
-                            class="form-check-input"
+                     <input type="radio" id="size-@size.Id" name="pizzaSize" class="form-check-input"
                             checked="@(OrderService.CurrentOrder.SelectedSize?.Id == size.Id)"
                             @onclick="@(() => HandleSizeSelection(size))" />
-                            
                      <label class="form-check-label" for="size-@size.Id">
-                         @size.Name 
-                         <span class="text-muted small">(@(size.Multiplier.ToString("0.0"))x)</span>
+                         @size.Name <span class="text-muted small">(@(size.Multiplier.ToString("0.0"))x)</span>
                      </label>
                  </div>
              }
          </div>
          @if (OrderService.CurrentOrder.SelectedSize == null)
-         {
-             <div class="alert alert-danger mt-2 p-2 small">Lütfen bir boyut seçimi yapınız.</div>
-         }
+         { <div class="alert alert-danger mt-2 p-2 small">Lütfen bir boyut seçimi yapınız.</div> }
     </div>
 
     <div class="card p-3 mb-4 shadow-sm">
          <h5 class="card-title">Malzeme Seçimi</h5>
-
-         <h6>Varsayılan Malzemeler (Fiyat Değişmez)</h6>
-         <ul class="list-unstyled d-flex flex-wrap gap-4">
+         <h6 class="small text-muted">Varsayılan Malzemeler (Fiyat Değişmez)</h6>
+         <div class="ingredient-chips d-flex flex-wrap gap-2 mt-2">
              @foreach (var ingredient in Pizza.Ingredients)
              {
-                 <li>
-                     <div class="form-check">
-                         <input class="form-check-input" 
-                                type="checkbox" 
-                                id="ing-@ingredient" 
-                                checked="@(!removedIngredients.Contains(ingredient))"
-                                @onchange="@(e => ToggleIngredientRemoval(ingredient, (bool)e.Value!))" />
-                         <label class="form-check-label" for="ing-@ingredient">
-                             @ingredient
-                         </label>
-                     </div>
-                 </li>
+                 <div class="chip form-check">
+                     <input class="form-check-input" type="checkbox" id="ing-@ingredient"
+                            checked="@(!removedIngredients.Contains(ingredient))"
+                            @onchange="@(e => ToggleIngredientRemoval(ingredient, (bool)e.Value!))" />
+                     <label class="form-check-label" for="ing-@ingredient">@ingredient</label>
+                 </div>
              }
-         </ul>
-
-         <h6 class="mt-3">Ekstra Malzemeler (Her biri 10,00 ₺)</h6>
-         <div class="d-flex flex-wrap gap-4 mt-2">
+         </div>
+         <h6 class="mt-3 small text-muted">Ekstra Malzemeler (Her biri 10,00 ₺)</h6>
+         <div class="extra-chips d-flex flex-wrap gap-2 mt-2">
              @foreach (var topping in AvailableExtraToppings)
              {
-                 <li>
-                     <div class="form-check">
-                         <input class="form-check-input" 
-                                type="checkbox" 
-                                id="top-@topping" 
-                                checked="@OrderService.CurrentOrder.SelectedToppings.Contains(topping)"
-                                @onchange="@(e => ToggleExtraTopping(topping, (bool)e.Value!))" />
-                                
-                         <label class="form-check-label" for="top-@topping">
-                             @topping <span class="text-success small">(+10₺)</span>
-                         </label>
-                     </div>
-                 </li>
+                 <div class="chip form-check">
+                     <input class="form-check-input" type="checkbox" id="top-@topping"
+                            checked="@OrderService.CurrentOrder.SelectedToppings.Contains(topping)"
+                            @onchange="@(e => ToggleExtraTopping(topping, (bool)e.Value!))" />
+                     <label class="form-check-label" for="top-@topping">
+                         @topping <span class="text-success small">(+10₺)</span>
+                     </label>
+                 </div>
              }
          </div>
     </div>
 }
 
 @code {
-    [Parameter] 
+    [Parameter]
     public Pizza? Pizza { get; set; }
-    
+
     private List<string> removedIngredients = new List<string>();
     private List<string> AvailableExtraToppings = new() { "Mantar", "Zeytin", "Jalapeno Biber", "Ekstra Peynir" };
-    
+
     protected override void OnParametersSet()
     {
+        // Pizza değiştiğinde veya ilk yüklendiğinde siparişi sıfırla/ayarla
         if (Pizza != null && OrderService.CurrentOrder.SelectedPizza?.Id != Pizza.Id)
         {
             OrderService.CurrentOrder.SelectedPizza = Pizza;
             OrderService.CurrentOrder.SelectedToppings.Clear();
             removedIngredients.Clear();
-            
-            if (OrderService.CurrentOrder.SelectedSize == null && Pizza.Sizes.Any())
-            {
-                OrderService.CurrentOrder.SelectedSize = Pizza.Sizes.First();
-            }
-            
-            OrderService.UpdateOrder();
+
+            // İlk boyutu varsayılan olarak seç (veya null bırakılabilir)
+            OrderService.CurrentOrder.SelectedSize = Pizza.Sizes.FirstOrDefault();
+
+            OrderService.UpdateOrder(); // Başlangıç fiyatını hesapla
+        }
+        // Eğer pizza aynı kalmışsa ama SelectedSize null ise (örn. geri butonundan sonra), tekrar ilk boyutu seç
+        else if (Pizza != null && OrderService.CurrentOrder.SelectedPizza?.Id == Pizza.Id && OrderService.CurrentOrder.SelectedSize == null && Pizza.Sizes.Any())
+        {
+             OrderService.CurrentOrder.SelectedSize = Pizza.Sizes.First();
+             OrderService.UpdateOrder();
         }
     }
 
     private void HandleSizeSelection(PizzaSize size)
     {
         OrderService.CurrentOrder.SelectedSize = size;
-        OrderService.UpdateOrder(); 
+        OrderService.UpdateOrder();
     }
-    
+
     private void ToggleIngredientRemoval(string ingredient, bool isIncluded)
     {
         if (isIncluded) { removedIngredients.Remove(ingredient); }
         else { removedIngredients.Add(ingredient); }
+        // Fiyat değişmediği için UpdateOrder() çağrılmaz.
     }
-    
+
     private void ToggleExtraTopping(string topping, bool isChecked)
     {
         bool alreadySelected = OrderService.CurrentOrder.SelectedToppings.Contains(topping);
-        
         if (isChecked && !alreadySelected)
-        {
-            OrderService.CurrentOrder.SelectedToppings.Add(topping);
-            OrderService.UpdateOrder(); 
-        }
+        { OrderService.CurrentOrder.SelectedToppings.Add(topping); OrderService.UpdateOrder(); }
         else if (!isChecked && alreadySelected)
-        {
-            OrderService.CurrentOrder.SelectedToppings.Remove(topping);
-            OrderService.UpdateOrder(); 
-        }
+        { OrderService.CurrentOrder.SelectedToppings.Remove(topping); OrderService.UpdateOrder(); }
     }
 }

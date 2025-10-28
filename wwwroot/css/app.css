@@ -1,25 +1,51 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+/* Color palette variables: warm pizza-themed */
+:root {
+    --pizza-primary: #c1440e; /* tomato */
+    --pizza-accent: #8b4513; /* crust brown */
+    --pizza-basil: #2a7b3b; /* basil green */
+    --pizza-cream: #fff4ea; /* warm cream background */
+    --pizza-text: #2b2b2b; /* main text */
+    --pizza-card-bg: #fffaf6; /* slightly warm card bg */
+    --pizza-muted: #6b6b6b;
+}
 /* app.css veya site.css */
 .pizza-list-header {
     text-align: center;
     margin-bottom: 30px;
+    background: linear-gradient(90deg, rgba(193,68,14,0.06), rgba(42,123,59,0.03));
+    color: var(--pizza-text);
 }
 
 .pizza-card {
     transition: transform 0.2s;
-    border: 1px solid #e0e0e0;
+    border: 1px solid rgba(139,69,19,0.12);
+    background-color: var(--pizza-card-bg);
+    color: var(--pizza-text);
+    border-radius: 8px;
 }
 
 .pizza-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(33, 33, 33, 0.08);
+}
+
+/* Slightly reduce overall page horizontal padding on very large screens */
+@media (min-width: 1400px) {
+    main.container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
 }
 
 .card-img-top {
     height: 200px; /* Sabit yükseklik */
     object-fit: cover; /* Resmi sığdırma */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: #f7f3ef;
 }
 
 h1:focus {
@@ -27,17 +53,23 @@ h1:focus {
 }
 
 a, .btn-link {
-    color: #0071c1;
+    color: var(--pizza-accent);
 }
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: var(--pizza-primary);
+    border-color: rgba(193,68,14,0.9);
+}
+
+.btn-primary:hover, .btn-primary:active {
+    background-color: #9f390c; /* slightly darker */
+    border-color: #8b300a;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.12rem white, 0 0 0 0.25rem rgba(193,68,14,0.25);
+    outline: none;
 }
 
 .content {
@@ -45,11 +77,11 @@ a, .btn-link {
 }
 
 .valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
+    outline: 1px solid var(--pizza-basil);
 }
 
 .invalid {
-    outline: 1px solid red;
+    outline: 1px solid #c12b2b;
 }
 
 .validation-message {
