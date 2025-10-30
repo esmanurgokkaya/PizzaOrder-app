@@ -1,6 +1,7 @@
 @page "/confirmation/{OrderNumber}" // EKLENDİ
 @using PizzaOrderApp.Models
 @using PizzaOrderApp.Services
+@using System.Globalization
 @inject OrderService OrderService
 @inject NavigationManager NavManager
 
@@ -35,7 +36,7 @@
                 <p class="mb-1"><strong>Pizza:</strong> @confirmedOrder.SelectedPizza?.Name (@confirmedOrder.SelectedSize?.Name)</p>
                 @if (confirmedOrder.SelectedToppings.Any())
                 { <p class="mb-1"><strong>Ek Malzemeler:</strong> @string.Join(", ", confirmedOrder.SelectedToppings)</p> }
-                <p class="mb-1"><strong>Toplam Tutar:</strong> @confirmedOrder.TotalPrice.ToString("C2")</p>
+                <p class="mb-1"><strong>Toplam Tutar:</strong> @confirmedOrder.TotalPrice.ToString("C2", new CultureInfo("tr-TR"))</p>
                 <hr/>
                 <p class="mb-1"><strong>Teslimat Adı:</strong> @confirmedOrder.CustomerInfo.Name</p>
                 <p class="mb-1"><strong>Teslimat Adresi:</strong> @confirmedOrder.CustomerInfo.Address</p>

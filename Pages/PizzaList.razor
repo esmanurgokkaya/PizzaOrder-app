@@ -1,5 +1,6 @@
 @page "/"
 @page "/pizzas"
+@using System.Globalization
 @* @using PizzaOrder_app.Models - _Imports.razor'da var *@
 @* @using PizzaOrder_app.Services - _Imports.razor'da var *@
 @inject PizzaService PizzaService
@@ -7,7 +8,7 @@
 <PageTitle>Pizzalarımız</PageTitle>
 
 <div class="pizza-list-header">
-    <h3 class="display-5">🍕 Menü: Lezzeti Seç</h3>
+    <h3 class="display-5">Menü: Lezzeti Seç</h3>
     <p>Dilediğiniz pizzayı seçin, boyutunu ve malzemelerini özelleştirin.</p>
 </div>
 
@@ -36,7 +37,7 @@ else
                             İçindekiler: @string.Join(", ", pizza.Ingredients.Take(3))@if(pizza.Ingredients.Count > 3){<span>...</span>}
                         </p>
                         <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
-                            <span class="price-tag h5 mb-0">@pizza.BasePrice.ToString("C2")*</span>
+                            <span class="price-tag h5 mb-0">@pizza.BasePrice.ToString("C2", new CultureInfo("tr-TR"))</span>
                             <NavLink href="@($"/pizzas/{pizza.Id}")" class="btn btn-primary" aria-label="@($"{pizza.Name} için seçim ve özelleştirme")">
                                 Seç ve Özelleştir
                             </NavLink>
