@@ -1,16 +1,13 @@
-/* Müşteri formu kartının arkaplanı */
 .customer-form-card {
-    background-color: #f8f9fa; /* Açık gri */
+    background-color: #f8f9fa; 
     border: 1px solid #dee2e6;
 }
 
-/* Form etiketleri */
 .form-label {
     font-weight: 500;
 }
 
-/* Validation mesajları için stil (opsiyonel) */
 .validation-message {
     font-size: 0.875em;
-    color: #dc3545; /* Kırmızı hata rengi */
+    color: #dc3545; 
 }

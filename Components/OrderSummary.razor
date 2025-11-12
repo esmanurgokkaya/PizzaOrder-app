@@ -1,5 +1,3 @@
-@* @using PizzaOrder_app.Models - _Imports.razor'da var *@
-@* @using PizzaOrder_app.Services - _Imports.razor'da var *@
 @namespace PizzaOrderApp.Components
 @using System.Globalization
 @inject OrderService OrderService
@@ -16,7 +14,7 @@
             <h6>@OrderService.CurrentOrder.SelectedPizza.Name</h6>
             <ul class="list-unstyled small">
                 <li><strong>Boyut:</strong> @(OrderService.CurrentOrder.SelectedSize?.Name ?? "Seçilmedi")</li>
-                <li><strong>Ek Malzemeler:</strong> @(OrderService.CurrentOrder.SelectedToppings.Any() ? $"{OrderService.CurrentOrder.SelectedToppings.Count} adet (+{(OrderService.CurrentOrder.SelectedToppings.Count * 10).ToString("C2")})" : "Yok")</li>
+                <li><strong>Ek Malzemeler:</strong> @(OrderService.CurrentOrder.SelectedToppings.Any() ? $"{OrderService.CurrentOrder.SelectedToppings.Count} adet (+{(OrderService.CurrentOrder.SelectedToppings.Count * 10).ToString("C2", new CultureInfo("tr-TR"))})" : "Yok")</li>
             </ul>
         }
         else
@@ -26,9 +24,7 @@
         <span class="h6 mb-0">Toplam Tutar:</span>
         <span class="total-price h4 mb-0">@OrderService.CurrentOrder.TotalPrice.ToString("C2", new CultureInfo("tr-TR"))</span>
     </div>
-    @* Show a small checkout link/button when the user is not currently on the checkout page.
-       This prevents a duplicate large button on the checkout page while still allowing
-       users to navigate there from previews (e.g. pizza details). *@
+   
     @if (!NavManager.Uri.EndsWith("/checkout", StringComparison.OrdinalIgnoreCase))
     {
         <div class="p-3">
@@ -47,11 +43,11 @@
     { OrderService.OnOrderStateChanged += OnOrderUpdated; }
 
     private void OnOrderUpdated()
-    { InvokeAsync(StateHasChanged); } // Güncelleme için InvokeAsync kullanmak daha güvenli
+    { InvokeAsync(StateHasChanged); } 
 
     private void GoToCheckout()
     { NavManager.NavigateTo("/checkout"); }
 
-    public void Dispose() // Bellek sızıntısını önler
+    public void Dispose() 
     { OrderService.OnOrderStateChanged -= OnOrderUpdated; }
 }

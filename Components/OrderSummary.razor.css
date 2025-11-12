@@ -1,13 +1,11 @@
-/* Sipariş özeti kartının kenarlığı */
 .order-summary-card {
     border: 1px solid rgba(139,69,19,0.12);
-    position: sticky; /* Sayfada aşağı kaydırınca sabit kalır (opsiyonel) */
-    top: 20px; /* Üstten boşluk */
+    position: sticky; 
+    top: 20px; 
     border-radius: 8px;
     overflow: hidden;
 }
 
-/* Summary header using pizza palette */
 .summary-header {
     background: linear-gradient(90deg, rgba(193,68,14,0.08), rgba(42,123,59,0.03));
     color: var(--pizza-accent);
@@ -26,7 +24,6 @@
     color: var(--pizza-basil);
 }
 
-/* Card header text weight */
 .card-header h5 { font-weight: 700; margin: 0; }
 
 @media (max-width: 991.98px) {

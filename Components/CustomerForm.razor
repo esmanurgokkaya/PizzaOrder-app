@@ -12,7 +12,6 @@
 
     <EditForm Model="@OrderService.CurrentOrder.CustomerInfo" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
-        @*<ValidationSummary />*@ @* İsteğe bağlı, alan bazlı mesajlar daha yaygın *@
 
         <div class="mb-3">
             <label for="name" class="form-label">Ad Soyad</label>
@@ -43,7 +42,7 @@
     {
         if (isSubmitting) return;
         isSubmitting = true;
-        StateHasChanged(); // Mesajı göster
+        StateHasChanged(); 
 
         var orderNumber = $"PZ-{DateTime.Now.ToString("yyyyMMdd")}-{new Random().Next(1000, 9999)}";
         OrderService.CurrentOrder.OrderNumber = orderNumber;

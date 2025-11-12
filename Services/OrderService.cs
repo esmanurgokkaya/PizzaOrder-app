@@ -1,13 +1,13 @@
-using PizzaOrderApp.Models; // Ad alanını kontrol edin
+using PizzaOrderApp.Models; 
 using System;
 using System.Text.Json;
 using Microsoft.JSInterop;
 using System.Threading.Tasks;
-using System.Collections.Generic; // List için eklendi
-using System.Linq; // Any için eklendi
+using System.Collections.Generic;
+using System.Linq; 
 
 
-namespace PizzaOrderApp.Services // Ad alanını kontrol edin
+namespace PizzaOrderApp.Services
 {
     public class OrderService
     {
@@ -56,10 +56,8 @@ namespace PizzaOrderApp.Services // Ad alanını kontrol edin
             catch (Exception ex)
             {
                  Console.WriteLine($"LocalStorage'a kaydetme hatası: {ex.Message}");
-                 // İsteğe bağlı: Kullanıcıya bir bildirim gösterilebilir.
             }
         }
-         // İsteğe bağlı: Son siparişi yüklemek için
         public async Task LoadLastOrderFromLocalStorageAsync()
         {
             try
@@ -67,10 +65,8 @@ namespace PizzaOrderApp.Services // Ad alanını kontrol edin
                 var orderJson = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "lastCompletedOrder");
                 if (!string.IsNullOrEmpty(orderJson))
                 {
-                    // Yüklenen siparişi CurrentOrder'a atayabilirsiniz veya başka bir değişkende tutabilirsiniz.
-                    // var lastOrder = JsonSerializer.Deserialize<Order>(orderJson);
-                    // CurrentOrder = lastOrder ?? new Order();
-                    // NotifyStateChanged(); // Yükleme sonrası arayüzü güncellemek için
+                    CurrentOrder = JsonSerializer.Deserialize<Order>(orderJson) ?? new Order();
+                    NotifyStateChanged();
                 }
             }
             catch (Exception ex)

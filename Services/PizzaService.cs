@@ -1,12 +1,12 @@
 using System.Net.Http;
 using System.Net.Http.Json;
-using PizzaOrderApp.Models; // Ad alanını kontrol edin
+using PizzaOrderApp.Models; 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq; // FirstOrDefault için eklendi
-using System; // Console.WriteLine için eklendi
+using System.Linq;
+using System; 
 
-namespace PizzaOrderApp.Services // Ad alanını kontrol edin
+namespace PizzaOrderApp.Services 
 {
     public class PizzaService
     {
@@ -29,7 +29,7 @@ namespace PizzaOrderApp.Services // Ad alanını kontrol edin
             {
                 _pizzas = await _httpClient.GetFromJsonAsync<List<Pizza>>("data/pizzas.json");
             }
-            catch (Exception ex) // Daha genel hata yakalama
+            catch (Exception ex) 
             {
                 Console.WriteLine($"Pizza verileri yüklenemedi: {ex.Message}");
                 _pizzas = new List<Pizza>();
@@ -38,9 +38,8 @@ namespace PizzaOrderApp.Services // Ad alanını kontrol edin
             return _pizzas ?? new List<Pizza>();
         }
 
-        public async Task<Pizza?> GetPizzaByIdAsync(string id) // Asenkron yapıldı
+        public async Task<Pizza?> GetPizzaByIdAsync(string id) 
         {
-             // Eğer _pizzas null ise önce yükle
             if (_pizzas == null)
             {
                 await GetPizzasAsync();
