@@ -1,48 +1,64 @@
 @page "/"
 @page "/pizzas"
 @using System.Globalization
-@* @using PizzaOrder_app.Models - _Imports.razor'da var *@
-@* @using PizzaOrder_app.Services - _Imports.razor'da var *@
 @inject PizzaService PizzaService
 
 <PageTitle>Pizzalarımız</PageTitle>
 
 <div class="pizza-list-header">
-    <h3 class="display-5">Menü: Lezzeti Seç</h3>
-    <p>Dilediğiniz pizzayı seçin, boyutunu ve malzemelerini özelleştirin.</p>
+    <h3 class="display-4 fw-bold mb-2">Menü</h3>
+    <p class="lead mb-0">Dilediğiniz pizzayı seçin, boyutunu ve malzemelerini özelleştirin.</p>
 </div>
 
 @if (pizzas == null)
 {
-    <div class="loading-indicator"><p>Pizzalar yükleniyor...</p></div>
+    <div class="loading-container">
+        <div class="spinner-border text-danger" role="status">
+            <span class="visually-hidden">Yükleniyor...</span>
+        </div>
+        <p class="mt-3 text-muted">Lezzetli pizzalar yükleniyor...</p>
+    </div>
 }
 else if (!pizzas.Any())
 {
-    <div class="alert alert-warning" role="alert">Menüde şu an için pizza bulunmamaktadır.</div>
+    <div class="alert alert-warning" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        Menüde şu an için pizza bulunmamaktadır.
+    </div>
 }
 else
 {
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
         @foreach (var pizza in pizzas)
         {
             <div class="col">
-                <div class="card shadow-sm h-100 pizza-card">
-                    @* Resim yolu wwwroot/images altında olmalı *@
-                <img loading="lazy" src="@((string.IsNullOrEmpty(pizza.ImageUrl) ? "/images/default-pizza.png" : (pizza.ImageUrl.StartsWith("/") ? pizza.ImageUrl : "/" + pizza.ImageUrl)))"
-                    class="card-img-top" alt="@pizza.Name"
-                    onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;400&quot; height=&quot;250&quot;&gt;&lt;rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%23eee&quot;/&gt;&lt;text x=&quot;50%&quot; y=&quot;50%&quot; dominant-baseline=&quot;middle&quot; text-anchor=&quot;middle&quot; fill=&quot;%23777&quot; font-size=&quot;24&quot;&gt;No image&lt;/text&gt;&lt;/svg&gt;';" /> @* Resim yoksa inline placeholder göster *@
+                <div class="card h-100 pizza-card">
+                    <div class="card-img-wrapper">
+                        <img loading="lazy" 
+                             src="@((string.IsNullOrEmpty(pizza.ImageUrl) ? "/images/default-pizza.png" : (pizza.ImageUrl.StartsWith("/") ? pizza.ImageUrl : "/" + pizza.ImageUrl)))" 
+                             class="card-img-top" 
+                             alt="@pizza.Name" 
+                             onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;400&quot; height=&quot;250&quot;&gt;&lt;rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;%23f8f9fa&quot;/&gt;&lt;text x=&quot;50%&quot; y=&quot;50%&quot; dominant-baseline=&quot;middle&quot; text-anchor=&quot;middle&quot; fill=&quot;%23adb5bd&quot; font-size=&quot;20&quot;&gt;🍕 Görsel Yok&lt;/text&gt;&lt;/svg&gt;';" />
+                        <div class="card-overlay"></div>
+                    </div>
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">@pizza.Name</h5>
-                        <p class="card-text text-muted small flex-grow-1">
-                            İçindekiler: @string.Join(", ", pizza.Ingredients.Take(3))@if(pizza.Ingredients.Count > 3){<span>...</span>}
+                        <h5 class="card-title fw-bold mb-2">@pizza.Name</h5>
+                        <p class="card-text text-muted small flex-grow-1 mb-3">
+                            <i class="bi bi-list-ul me-1"></i>
+                            @string.Join(", ", pizza.Ingredients.Take(3))@if(pizza.Ingredients.Count > 3){<span> ve daha fazlası</span>}
                         </p>
-                        <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
-                            <span class="price-tag h5 mb-0">@pizza.BasePrice.ToString("C2", new CultureInfo("tr-TR"))</span>
-                            <NavLink href="@($"/pizzas/{pizza.Id}")" class="btn btn-primary" aria-label="@($"{pizza.Name} için seçim ve özelleştirme")">
-                                Seç ve Özelleştir
-                            </NavLink>
+                        <div class="card-footer-custom mt-auto pt-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="price-badge">
+                                    <span class="price-label">Başlangıç</span>
+                                    <span class="price-value">@pizza.BasePrice.ToString("C2", new CultureInfo("tr-TR"))</span>
+                                </div>
+                                <NavLink href="@($"/pizzas/{pizza.Id}")" class="btn btn-order" aria-label="@($"{pizza.Name} için seçim ve özelleştirme")">
+                                    <span>Sipariş Ver</span>
+                                    <i class="bi bi-arrow-right ms-1"></i>
+                                </NavLink>
+                            </div>
                         </div>
-                         <p class="card-text small text-muted text-end mt-1">*Başlangıç fiyatı</p>
                     </div>
                 </div>
             </div>

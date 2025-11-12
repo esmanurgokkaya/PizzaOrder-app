@@ -1,4 +1,4 @@
-@page "/confirmation/{OrderNumber}" // EKLENDİ
+@page "/confirmation/{OrderNumber}"
 @using PizzaOrderApp.Models
 @using PizzaOrderApp.Services
 @using System.Globalization
@@ -16,7 +16,7 @@
     protected override void OnInitialized()
     {
         confirmedOrder = OrderService.CurrentOrder;
-        // Güvenlik kontrolü
+        
         if (confirmedOrder == null || confirmedOrder.OrderNumber != OrderNumber || string.IsNullOrEmpty(OrderNumber))
         {
              confirmedOrder = null;
@@ -24,37 +24,87 @@
     }
 }
 
-<div class="container mt-5 text-center">
+<div class="container confirmation-container">
     @if (confirmedOrder != null)
     {
-        <div class="card p-5 shadow-lg bg-light confirmation-box">
-            <h1 class="text-success mb-4">✔ Siparişiniz Onaylandı!</h1>
-            <p class="lead mb-4">Teşekkür ederiz! Siparişiniz hazırlanmaya başlamıştır.</p>
-            <h2 class="mb-4">Sipariş Numaranız: <span class="badge bg-primary p-3">@OrderNumber</span></h2>
-            <div class="text-start mx-auto mt-3 mb-4" style="max-width: 450px; border-top: 1px solid #ddd; padding-top: 1rem;">
-                <h5>Sipariş Detayları:</h5>
-                <p class="mb-1"><strong>Pizza:</strong> @confirmedOrder.SelectedPizza?.Name (@confirmedOrder.SelectedSize?.Name)</p>
-                @if (confirmedOrder.SelectedToppings.Any())
-                { <p class="mb-1"><strong>Ek Malzemeler:</strong> @string.Join(", ", confirmedOrder.SelectedToppings)</p> }
-                <p class="mb-1"><strong>Toplam Tutar:</strong> @confirmedOrder.TotalPrice.ToString("C2", new CultureInfo("tr-TR"))</p>
-                <hr/>
-                <p class="mb-1"><strong>Teslimat Adı:</strong> @confirmedOrder.CustomerInfo.Name</p>
-                <p class="mb-1"><strong>Teslimat Adresi:</strong> @confirmedOrder.CustomerInfo.Address</p>
+        <div class="confirmation-success-wrapper">
+
+            <div class="confirmation-card">
+                <div class="card-header-custom">
+                    <h1 class="confirmation-title">Siparişiniz Onaylandı!</h1>
+                    <p class="confirmation-subtitle">Teşekkür ederiz! Siparişiniz hazırlanmaya başlamıştır.</p>
+                </div>
+
+                <div class="order-number-section">
+                    <span class="order-number-label">Sipariş Numaranız</span>
+                    <div class="order-number-badge">
+                        <span class="order-number">@OrderNumber</span>
+                    </div>
+                </div>
+
+                <div class="order-details-section">
+                    <h5 class="section-title">
+                        <i class="bi bi-list-check me-2"></i>Sipariş Detayları
+                    </h5>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Pizza</span>
+                        <span class="detail-value">@confirmedOrder.SelectedPizza?.Name (@confirmedOrder.SelectedSize?.Name)</span>
+                    </div>
+
+                    @if (confirmedOrder.SelectedToppings.Any())
+                    {
+                        <div class="detail-item">
+                            <span class="detail-label">Ek Malzemeler</span>
+                            <span class="detail-value">@string.Join(", ", confirmedOrder.SelectedToppings)</span>
+                        </div>
+                    }
+
+                    <div class="detail-item total-item">
+                        <span class="detail-label">Toplam Tutar</span>
+                        <span class="detail-value total-price">@confirmedOrder.TotalPrice.ToString("C2", new CultureInfo("tr-TR"))</span>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h5 class="section-title mt-4">
+                        <i class="bi bi-geo-alt-fill me-2"></i>Teslimat Bilgileri
+                    </h5>
+
+                    <div class="detail-item">
+                        <span class="detail-label">Ad Soyad</span>
+                        <span class="detail-value">@confirmedOrder.CustomerInfo.Name</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">Teslimat Adresi</span>
+                        <span class="detail-value">@confirmedOrder.CustomerInfo.Address</span>
+                    </div>
+                </div>
+
+                <div class="action-section">
+                    <button @onclick='() => NavManager.NavigateTo("/pizzas")' class="btn btn-new-order">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Yeni Sipariş Oluştur
+                    </button>
+                </div>
             </div>
-            <button @onclick='() => NavManager.NavigateTo("/pizzas")' class="btn btn-warning btn-lg mt-4">
-                Yeni Sipariş Oluştur
-            </button>
         </div>
     }
     else
     {
-        <div class="alert alert-danger" role="alert">
-            <h4 class="alert-heading">Geçersiz Sipariş Numarası!</h4>
-            <p>Görüntülemeye çalıştığınız sipariş bulunamadı.</p>
-            <hr>
-            <button @onclick='() => NavManager.NavigateTo("/pizzas")' class="btn btn-secondary mt-3">
-                Ana Sayfaya Dön
-            </button>
+        <div class="error-wrapper">
+            <div class="error-icon">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <div class="error-card">
+                <h4 class="error-title">Geçersiz Sipariş Numarası!</h4>
+                <p class="error-message">Görüntülemeye çalıştığınız sipariş bulunamadı.</p>
+                <button @onclick='() => NavManager.NavigateTo("/pizzas")' class="btn btn-back-home">
+                    <i class="bi bi-house-door me-2"></i>
+                    Ana Sayfaya Dön
+                </button>
+            </div>
         </div>
     }
 </div>

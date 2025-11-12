@@ -1,4 +1,4 @@
-@page "/checkout" // EKLENDİ
+@page "/checkout"
 @using PizzaOrderApp.Services
 @using PizzaOrderApp.Components
 @inject OrderService OrderService
@@ -7,26 +7,33 @@
 <PageTitle>Ödeme Ekranı</PageTitle>
 
 <div class="container mt-5 checkout-page">
-    <h3 class="mb-4">Sipariş Tamamlama ve Ödeme</h3>
+    <div class="page-header">
+        <h3 class="page-title"><i class="bi bi-credit-card-fill me-2"></i>Siparişi Tamamla ve Öde</h3>
+        <p class="page-subtitle">Teslimat ve ödeme bilgilerinizi girerek siparişinizi onaylayın.</p>
+    </div>
 
     @if (OrderService.CurrentOrder.SelectedPizza == null || OrderService.CurrentOrder.SelectedSize == null)
     {
-        <div class="alert alert-danger" role="alert">
-            <h4 class="alert-heading">Sipariş Bulunamadı!</h4>
-            <p>Lütfen menüye dönerek bir pizza seçin.</p>
-            <button class="btn btn-warning mt-3" @onclick='() => NavManager.NavigateTo("/pizzas")'>
+        <div class="alert alert-danger custom-error-alert" role="alert">
+            <h4 class="alert-heading"><i class="bi bi-bag-x-fill me-2"></i>Sipariş Bulunamadı!</h4>
+            <p>Lütfen menüye dönerek bir pizza seçimi yapın ve boyutunu özelleştirin.</p>
+            <button class="btn btn-primary-alt mt-3" @onclick='() => NavManager.NavigateTo("/pizzas")'>
                 🍕 Menüye Dön
             </button>
         </div>
     }
     else
     {
-        <div class="row g-5">
+        <div class="row g-5 checkout-content">
             <div class="col-lg-7 order-lg-1">
-                <CustomerForm />
+                <div class="checkout-card form-card">
+                    <CustomerForm />
+                </div>
             </div>
             <div class="col-lg-5 order-lg-2">
-                <OrderSummary />
+                <div class="sticky-summary">
+                    <OrderSummary />
+                </div>
             </div>
         </div>
     }

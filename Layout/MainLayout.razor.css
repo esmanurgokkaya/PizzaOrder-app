@@ -1,35 +1,52 @@
+/* Stil Değişkenleri (Diğer sayfalarla uyumlu) */
+:root {
+    --pizza-primary: #dc3545; /* Kırmızı */
+    --pizza-secondary: #ffc107; /* Sarı */
+    --pizza-text: #212529;
+    --pizza-shadow: rgba(0, 0, 0, 0.1);
+}
 
 .app-container {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #ffffff;
-    color: #222222;
+    background-color: #f8f9fa; /* Hafif arka plan */
+    color: var(--pizza-text);
 }
 
+/* --- Header Stili --- */
 .app-header {
-    background: linear-gradient(90deg, rgba(193,68,14,0.06), rgba(42,123,59,0.02));
-    border-bottom: 1px solid rgba(139,69,19,0.08);
-    padding: 0.6rem 0; /* reduce vertical space */
+    /* Hafif degrade arka plan ve belirgin gölge */
+    background: linear-gradient(90deg, #ffe8e8 0%, #fff5f5 100%);
+    border-bottom: 1px solid rgba(220, 53, 69, 0.1);
+    padding: 1rem 0; /* Daha belirgin dikey boşluk */
+    box-shadow: 0 2px 8px var(--pizza-shadow);
 }
 
 .app-header .container-fluid {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    display: flex;
-    align-items: center;
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .brand {
     font-weight: 800;
-    color: var(--pizza-accent);
+    color: var(--pizza-primary); /* Marka rengi kırmızı */
     text-decoration: none;
-    font-size: 1.05rem;
-    margin-left: 0.25rem;
+    font-size: 1.5rem; /* Daha büyük ve dikkat çekici font */
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
 }
 
+.brand:hover {
+    color: var(--pizza-primary-dark);
+}
+
+/* --- Main Content Stili --- */
 main.container {
-    max-width: 1280px; /* slightly wider to reduce side whitespace */
+    max-width: 1280px;
     width: 100%;
     margin: 0 auto;
     padding-left: 1rem;
@@ -39,20 +56,25 @@ main.container {
 }
 
 .content {
-    padding-top: 0.75rem; /* tighten vertical rhythm */
-    padding-bottom: 1.5rem;
+    padding-top: 1.5rem; /* Dikey ritmi ayarlama */
+    padding-bottom: 2rem;
 }
 
+/* --- Hata Arayüzü Stili (Blazor) --- */
 #blazor-error-ui {
-    background: lightyellow;
+    background: var(--pizza-secondary); /* Sarı hata arkaplanı */
+    color: var(--pizza-text);
     bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.3);
     display: none;
     left: 0;
     padding: 0.6rem 1.25rem 0.7rem 1.25rem;
     position: fixed;
     width: 100%;
     z-index: 1000;
+    font-weight: 600;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
 
     #blazor-error-ui .dismiss {
@@ -60,4 +82,6 @@ main.container {
         position: absolute;
         right: 0.75rem;
         top: 0.5rem;
+        font-size: 1.2rem;
+        color: var(--pizza-primary);
     }

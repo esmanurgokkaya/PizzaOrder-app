@@ -1,11 +1,149 @@
-/* Checkout sayfasının genel yapısı */
-.container {
-    padding-top: 2rem;
+:root {
+    --pizza-primary: #dc3545; 
+    --pizza-primary-dark: #bb2d3b;
+    --pizza-secondary: #ffc107; 
+    --pizza-text: #212529;
+    --pizza-text-muted: #6c757d;
+    --pizza-bg: #ffffff;
+    --pizza-shadow: rgba(0, 0, 0, 0.1);
 }
 
-/* Hata mesajı için stil */
-.alert-danger a {
-    color: #721c24; /* Hata mesajındaki link rengi */
-    font-weight: bold;
-    text-decoration: underline;
+.checkout-page {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.page-header {
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef2f2 0%, #ffe8e8 100%);
+    border-radius: 16px;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--pizza-primary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.page-title i {
+    color: var(--pizza-primary);
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: var(--pizza-text-muted);
+    margin-bottom: 0;
+}
+
+.custom-error-alert {
+    border: none;
+    border-radius: 16px;
+    padding: 2rem;
+    background: linear-gradient(135deg, #ffe6e6 0%, #ffd1d1 100%);
+    color: #721c24; 
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.custom-error-alert .alert-heading {
+    font-weight: 700;
+    color: var(--pizza-primary);
+}
+
+.btn-primary-alt {
+    background: linear-gradient(135deg, var(--pizza-secondary) 0%, #e0a800 100%);
+    color: var(--pizza-text);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-primary-alt:hover {
+    background: linear-gradient(135deg, #e0a800 0%, #c69500 100%);
+    transform: translateY(-2px);
+}
+
+.btn-primary-alt:focus-visible {
+    outline: 3px solid var(--pizza-primary);
+    outline-offset: 3px;
+}
+
+.checkout-content {
+    align-items: start;
+    animation: fadeInUp 0.5s ease-out 0.1s backwards;
+}
+
+.checkout-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    background: var(--pizza-bg);
+    padding: 2.5rem;
+}
+
+.form-card {
+    border-top: 5px solid var(--pizza-primary); 
+}
+
+.sticky-summary {
+    position: sticky;
+    top: 20px;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 991.98px) {
+    .col-lg-5 {
+        margin-top: 2rem;
+    }
+
+    .sticky-summary {
+        position: static;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+    .page-subtitle {
+        font-size: 0.9rem;
+    }
+    .page-header {
+        padding: 1rem;
+    }
+    .checkout-card {
+        padding: 1.5rem;
+    }
+    .custom-error-alert {
+        padding: 1.5rem;
+    }
+    .btn-primary-alt {
+        font-size: 0.9rem;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }

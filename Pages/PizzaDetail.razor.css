@@ -1,18 +1,226 @@
-/* Sayfanın genel konteynerine biraz üst boşluk ekler */
-.container {
-    padding-top: 1.25rem;
-    padding-bottom: 1.25rem;
+:root {
+    --pizza-primary: #dc3545;
+    --pizza-primary-dark: #bb2d3b;
+    --pizza-secondary: #ffc107;
+    --pizza-text: #212529;
+    --pizza-text-muted: #6c757d;
+    --pizza-border: #dee2e6;
+    --pizza-bg: #ffffff;
+    --pizza-shadow: rgba(0, 0, 0, 0.1);
 }
 
-/* Sağdaki sipariş özeti sütununun hizalaması (mobil için) */
+.container {
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.error-state-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.custom-alert {
+    max-width: 600px;
+    border: none;
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.alert-warning.custom-alert {
+    background: linear-gradient(135deg, #fff9e6 0%, #ffedcc 100%);
+}
+
+.alert-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.alert-warning .alert-icon {
+    color: var(--pizza-secondary); 
+}
+
+.alert-heading {
+    font-weight: 700;
+    color: var(--pizza-text);
+}
+
+.loading-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.loading-state .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3rem;
+}
+
+.page-header-detail {
+    margin-bottom: 2rem;
+    padding: 1.5rem; 
+    background: linear-gradient(135deg, #fef2f2 0%, #ffe8e8 100%); 
+    border-radius: 16px;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin-bottom: 0.75rem;
+}
+
+.breadcrumb-item a {
+    color: var(--pizza-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-item a:hover {
+    color: var(--pizza-primary-dark);
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: var(--pizza-text-muted);
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    color: var(--pizza-text-muted);
+    font-size: 1.2rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--pizza-primary); 
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.page-title i {
+    color: var(--pizza-primary);
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: var(--pizza-text-muted);
+    margin-bottom: 0;
+}
+
+.detail-content {
+    align-items: start;
+    animation: fadeInUp 0.5s ease-out 0.1s backwards;
+}
+
+.customize-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    background: var(--pizza-bg);
+    padding: 2.5rem;
+    border-top: 5px solid var(--pizza-primary); 
+}
+
+.sticky-summary .card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    background: var(--pizza-bg);
+}
+
+.sticky-summary {
+    position: sticky;
+    top: 20px;
+    transition: all 0.3s ease;
+}
+
 @media (max-width: 991.98px) {
     .col-lg-5 {
-        margin-top: 1.25rem; /* Küçük ekranlarda özetin altına boşluk ekle */
+        margin-top: 1.5rem;
+    }
+
+    .sticky-summary {
+        position: static;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+    }
+
+    .page-header-detail {
+        margin-bottom: 1.5rem;
+        padding: 1.25rem;
+    }
+
+    .customize-card {
+        padding: 1.5rem;
     }
 }
 
-/* Make pizza customizer and summary cards align visually */
-.row.g-4 { align-items: start; }
+@media (max-width: 576px) {
+    .container {
+        padding-top: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .custom-alert {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .alert-icon {
+        font-size: 2rem;
+    }
+}
+
 @media (min-width: 992px) {
-    .col-lg-7 .card, .col-lg-5 .card, .order-summary-card { height: 100%; }
+    .customize-card {
+        min-height: 500px;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.breadcrumb-item a:focus-visible {
+    outline: 3px solid var(--pizza-secondary);
+    outline-offset: 3px;
+    border-radius: 4px;
 }

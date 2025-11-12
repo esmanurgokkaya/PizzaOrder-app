@@ -1,7 +1,4 @@
 @page "/pizzas/{Id}"
-@* @using PizzaOrder_app.Models - _Imports.razor'da var *@
-@* @using PizzaOrder_app.Services - _Imports.razor'da var *@
-@* @using PizzaOrder_app.Components - _Imports.razor'da var *@
 @inject PizzaService PizzaService
 
 <PageTitle>Özelleştirme - @selectedPizza?.Name</PageTitle>
@@ -12,7 +9,6 @@
 
     private Pizza? selectedPizza;
 
-    // Parametre değiştiğinde veya sayfa ilk yüklendiğinde pizzayı yükle
     protected override async Task OnParametersSetAsync()
     {
         if (!string.IsNullOrEmpty(Id))
@@ -21,33 +17,63 @@
         }
         else
         {
-             selectedPizza = null; // ID yoksa temizle
+             selectedPizza = null;
         }
     }
 }
 
-<div class="container mt-4">
+<div class="container mt-4 mb-5">
     @if (selectedPizza == null)
     {
-        @if (string.IsNullOrEmpty(Id))
-        {
-             <p class="alert alert-warning">Lütfen menüden bir pizza seçin.</p>
-        }
-        else
-        {
-             <p class="alert alert-danger">Pizza bulunamadı (ID: @Id) veya veriler yükleniyor...</p>
-        }
+        <div class="error-state-container">
+            @if (string.IsNullOrEmpty(Id))
+            {
+                <div class="alert alert-warning custom-alert">
+                    <div class="alert-icon">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h5 class="alert-heading mb-1">Pizza Seçilmedi</h5>
+                        <p class="mb-0">Lütfen menüden bir pizza seçin.</p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="loading-state">
+                    <div class="spinner-border text-danger mb-3" role="status">
+                        <span class="visually-hidden">Yükleniyor...</span>
+                    </div>
+                    <p class="text-muted">Pizza bilgileri yükleniyor...</p>
+                    <small class="text-muted">ID: @Id</small>
+                </div>
+            }
+        </div>
     }
     else
-    {
-        <div class="row g-4">
+    {        
+        <div class="page-header-detail">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/pizzas">Menü</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@selectedPizza.Name</li>
+                </ol>
+            </nav>
+            <h2 class="page-title"><i class="bi bi-gear-fill me-2"></i>@selectedPizza.Name Pizzanı Özelleştir</h2>
+            <p class="page-subtitle">Pizzanızı dilediğiniz gibi hazırlayın</p>
+        </div>
+
+        <div class="row g-4 detail-content">
             <div class="col-lg-7">
-                @* Pizza özelleştirme bileşeni, seçilen pizzayı parametre olarak alır *@
-                <PizzaCustomizer Pizza="selectedPizza" />
+                <div class="customize-card">
+                    <PizzaCustomizer Pizza="selectedPizza" />
+                </div>
             </div>
+            
             <div class="col-lg-5">
-                @* Sipariş özeti bileşeni *@
-                <OrderSummary />
+                <div class="sticky-summary">
+                    <OrderSummary />
+                </div>
             </div>
         </div>
     }

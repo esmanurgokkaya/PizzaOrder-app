@@ -1,12 +1,11 @@
-﻿
-@namespace PizzaOrderApp.Layout
+﻿@namespace PizzaOrderApp.Layout
 @inherits LayoutComponentBase
+
 <div class="app-container">
     <header class="app-header px-4">
         <div class="container-fluid d-flex align-items-center">
-            <a class="brand" href="/">PizzaOrder</a>
+            <a class="brand" href="/">Pizza</a>
             <nav class="ms-auto" aria-label="site-links">
-                <!-- kept empty on purpose: app uses pages and direct links -->
             </nav>
         </div>
     </header>
@@ -16,4 +15,10 @@
             @Body
         </article>
     </main>
+    
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
 </div>
