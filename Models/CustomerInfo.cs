@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PizzaOrderApp.Models
 {
+    // Müşteri bilgilerini tutar: isim, e-posta ve teslimat adresi.
     public class CustomerInfo
     {
         [Required(ErrorMessage = "Ad alanı zorunludur.")]

@@ -2,6 +2,12 @@
 @using System.Globalization
 @inject OrderService OrderService
 
+@* Pizza özelleştirme bileşeni:
+    - `Pizza` parametresi ile seçili pizzayı alır.
+    - Boyut seçimleri `Pizza.Sizes` üzerinden yapılır ve seçilen boyut `OrderService.CurrentOrder.SelectedSize` içinde güncellenir.
+    - Varsayılan malzemeleri kaldırma ve ekstra malzemeler ekleme seçenekleri sunar.
+    - Her değişiklikte `OrderService.UpdateOrder()` çağrılarak toplam yeniden hesaplanır. *@
+
 @if (Pizza == null)
 { <p>Pizza seçimi bekleniyor...</p> }
 else
@@ -13,6 +19,7 @@ else
 
     <div class="card p-3 mb-4 shadow-sm">
         <h5 class="card-title">Boyut Seçimi</h5>
+        @* Boyutlar: her boyutun çarpan (fiyat için multiplier) bilgisi etiketlenir. *@
         <div class="d-flex flex-wrap gap-3">
              @foreach (var size in Pizza.Sizes)
              {
@@ -33,6 +40,8 @@ else
     <div class="card p-3 mb-4 shadow-sm">
          <h5 class="card-title">Malzeme Seçimi</h5>
          <h6 class="small text-muted">Varsayılan Malzemeler</h6>
+     @* Varsayılan malzemeler için checkbox: işaret kaldırılırsa malzeme çıkarılır (removedIngredients listesi).
+        Bu, görsel tercih için uygundur ve fiyatı doğrudan değiştirmez. *@
          <div class="ingredient-chips d-flex flex-wrap gap-2 mt-2">
              @foreach (var ingredient in Pizza.Ingredients)
              {
@@ -45,6 +54,8 @@ else
              }
          </div>
          <h6 class="mt-3 small text-muted">Ekstra Malzemeler</h6>
+            @* Ekstra malzemeler seçildiğinde siparişin `SelectedToppings` listesine eklenir ve fiyat +10₺ artar.
+                ToggleExtraTopping metodu OrderService.UpdateOrder() çağırarak toplamı günceller. *@
          <div class="extra-chips d-flex flex-wrap gap-2 mt-2">
              @foreach (var topping in AvailableExtraToppings)
              {

@@ -1,6 +1,10 @@
 @page "/pizzas/{Id}"
 @inject PizzaService PizzaService
 
+@* Pizza detay/özelleştirme sayfası:
+    - `Id` parametresi ile seçilen pizzayı yükler.
+    - Yüklenince `PizzaCustomizer` ve `OrderSummary` bileşenlerini gösterir. *@
+
 <PageTitle>Özelleştirme - @selectedPizza?.Name</PageTitle>
 
 @code {

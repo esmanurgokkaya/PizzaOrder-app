@@ -9,8 +9,10 @@ using System.Linq;
 
 namespace PizzaOrderApp.Services
 {
+    // Sipariş durumunu yöneten servis: seçim, fiyat hesaplama ve yerel depolama işlemleri.
     public class OrderService
     {
+        // IJSRuntime ile localStorage erişimi sağlar (JS interop için constructor'ta alınır).
         private const decimal ExtraToppingPrice = 10.00m;
         public Order CurrentOrder { get; private set; } = new Order();
         public event Action? OnOrderStateChanged;
@@ -21,12 +23,15 @@ namespace PizzaOrderApp.Services
             _jsRuntime = jsRuntime;
         }
 
+        // Sipariş değiştiğinde fiyatı yeniden hesaplar ve abonelere bildirir.
         public void UpdateOrder()
         {
             CalculatePrice();
             NotifyStateChanged();
         }
 
+        // Toplam tutarı hesaplar: baz fiyat * boyut çarpanı + ekstra malzeme ücreti.
+        // Seçili pizza veya boyut yoksa toplam 0 olur.
         private void CalculatePrice()
         {
             if (CurrentOrder.SelectedPizza == null || CurrentOrder.SelectedSize == null)
@@ -41,12 +46,14 @@ namespace PizzaOrderApp.Services
             CurrentOrder.TotalPrice = (basePrice * (decimal)multiplier) + toppingsCost;
         }
 
+        // `OnOrderStateChanged` olayını tetikler (UI ve diğer aboneler için güncelleme bildirimi).
         private void NotifyStateChanged()
         {
             OnOrderStateChanged?.Invoke();
         }
 
-        public async Task SaveOrderToLocalStorageAsync()
+    // Mevcut siparişi JSON olarak localStorage'a kaydeder (JS interop kullanır).
+    public async Task SaveOrderToLocalStorageAsync()
         {
             try
             {
@@ -58,7 +65,9 @@ namespace PizzaOrderApp.Services
                  Console.WriteLine($"LocalStorage'a kaydetme hatası: {ex.Message}");
             }
         }
-        public async Task LoadLastOrderFromLocalStorageAsync()
+    // LocalStorage'dan 'lastCompletedOrder' anahtarını okuyup `CurrentOrder`'ı yükler.
+    // Başarısız olursa boş bir sipariş ile devam eder.
+    public async Task LoadLastOrderFromLocalStorageAsync()
         {
             try
             {

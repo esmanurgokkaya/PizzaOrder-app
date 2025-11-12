@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace PizzaOrderApp.Models
 {
+    // Menüdeki bir pizzayı tanımlar: ad, temel fiyat, malzemeler ve desteklenen boyutlar.
     public class Pizza
     {
         public string Id { get; set; } = string.Empty;

@@ -4,9 +4,14 @@
 @inject OrderService OrderService
 @inject NavigationManager NavManager
 
+@* Bu bileşen: sipariş için teslimat bilgilerini toplar.
+    - `EditForm` ile model bağlama ve validasyon yapar.
+    - Geçerli sipariş `OrderService.CurrentOrder.CustomerInfo` üzerinden yönetilir.
+    - OnValidSubmit başarılı olduğunda sipariş numarası oluşturulur ve onay sayfasına yönlendirilir. *@
+
 <div class="card p-4 shadow-lg customer-form-card">
     <h4 class="mb-4">Teslimat Bilgileri</h4>
-
+    @* Form: veri bağlama ve doğrulama (DataAnnotations) kullanılır. *@
     @if (isSubmitting)
     { <div class="alert alert-info">Siparişiniz işleniyor...</div> }
 

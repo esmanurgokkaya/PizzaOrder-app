@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace PizzaOrderApp.Models
 {
+    // Bir siparişin seçili pizza, boyut, ekstra malzemeler ve toplam tutarını tutar.
     public class Order
     {
         public Pizza? SelectedPizza { get; set; }

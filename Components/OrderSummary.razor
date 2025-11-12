@@ -4,6 +4,12 @@
 @implements IDisposable
 @inject NavigationManager NavManager
 
+@* Sipariş özeti bileşeni:
+    - `OrderService.CurrentOrder` üzerinden seçili pizza, boyut ve ekstra malzemeler gösterilir.
+    - Toplam tutar `OrderService.CurrentOrder.TotalPrice` kullanılarak görüntülenir (kültüre göre biçimlendirilir).
+    - Bileşen, `OrderService.OnOrderStateChanged` olayına abone olarak güncellemeleri dinler ve Dispose içinde aboneliği kaldırır.
+    - Checkout'a gitme butonu, boyut seçilmemişse devre dışı bırakılır. *@
+
 <div class="card shadow-sm order-summary-card">
     <div class="card-header summary-header">
         <h5 class="mb-0">🛒 Sipariş Özeti</h5>

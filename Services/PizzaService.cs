@@ -8,6 +8,7 @@ using System;
 
 namespace PizzaOrderApp.Services 
 {
+    // Pizza verilerini yükleyen servis: `data/pizzas.json`'den menü verilerini getirir ve önbellekler.
     public class PizzaService
     {
         private readonly HttpClient _httpClient;
@@ -18,7 +19,8 @@ namespace PizzaOrderApp.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<Pizza>> GetPizzasAsync()
+    // Menüdeki tüm pizzaları döner; iç önbellek varsa doğrudan onu kullanır.
+    public async Task<List<Pizza>> GetPizzasAsync()
         {
             if (_pizzas != null)
             {
@@ -38,7 +40,8 @@ namespace PizzaOrderApp.Services
             return _pizzas ?? new List<Pizza>();
         }
 
-        public async Task<Pizza?> GetPizzaByIdAsync(string id) 
+    // Verilen `id` ile önbellekteki pizzayı döndürür, önbellek boşsa önce tüm pizzaları yükler.
+    public async Task<Pizza?> GetPizzaByIdAsync(string id) 
         {
             if (_pizzas == null)
             {
