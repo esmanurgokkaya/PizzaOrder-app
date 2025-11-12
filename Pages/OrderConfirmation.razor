@@ -13,13 +13,15 @@
 
     private Order? confirmedOrder;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await OrderService.LoadLastOrderFromLocalStorageAsync();
+
         confirmedOrder = OrderService.CurrentOrder;
-        
-        if (confirmedOrder == null || confirmedOrder.OrderNumber != OrderNumber || string.IsNullOrEmpty(OrderNumber))
+
+        if (confirmedOrder == null || string.IsNullOrEmpty(OrderNumber) || confirmedOrder.OrderNumber != OrderNumber)
         {
-             confirmedOrder = null;
+            confirmedOrder = null;
         }
     }
 }
@@ -94,9 +96,6 @@
     else
     {
         <div class="error-wrapper">
-            <div class="error-icon">
-                <i class="bi bi-exclamation-triangle-fill"></i>
-            </div>
             <div class="error-card">
                 <h4 class="error-title">Geçersiz Sipariş Numarası!</h4>
                 <p class="error-message">Görüntülemeye çalıştığınız sipariş bulunamadı.</p>
