@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\esman\\2025 Projects\\PizzaOrder-app\\PizzaOrder-app.csproj": {}
+    "C:\\Users\\esman\\2025 Projects\\PizzaOrder\\PizzaOrder-app\\PizzaOrder-app.csproj": {}
   },
   "projects": {
-    "C:\\Users\\esman\\2025 Projects\\PizzaOrder-app\\PizzaOrder-app.csproj": {
+    "C:\\Users\\esman\\2025 Projects\\PizzaOrder\\PizzaOrder-app\\PizzaOrder-app.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\esman\\2025 Projects\\PizzaOrder-app\\PizzaOrder-app.csproj",
+        "projectUniqueName": "C:\\Users\\esman\\2025 Projects\\PizzaOrder\\PizzaOrder-app\\PizzaOrder-app.csproj",
         "projectName": "PizzaOrder-app",
-        "projectPath": "C:\\Users\\esman\\2025 Projects\\PizzaOrder-app\\PizzaOrder-app.csproj",
+        "projectPath": "C:\\Users\\esman\\2025 Projects\\PizzaOrder\\PizzaOrder-app\\PizzaOrder-app.csproj",
         "packagesPath": "C:\\Users\\esman\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\esman\\2025 Projects\\PizzaOrder-app\\obj\\",
+        "outputPath": "C:\\Users\\esman\\2025 Projects\\PizzaOrder\\PizzaOrder-app\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\esman\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -55,17 +55,15 @@
               "target": "Package",
               "version": "[9.0.9, )"
             },
-            "Microsoft.NET.ILLink.Tasks": {
-              "suppressParent": "All",
+            "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[9.0.10, )",
-              "autoReferenced": true
+              "version": "[9.0.1, )"
             },
-            "Microsoft.NET.Sdk.WebAssembly.Pack": {
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.10, )",
-              "autoReferenced": true
+              "version": "[9.0.1, )"
             }
           },
           "imports": [
@@ -79,23 +77,15 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[9.0.10, 9.0.10]"
-            }
-          ],
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
-        }
-      },
-      "runtimes": {
-        "browser-wasm": {
-          "#import": []
         }
       }
     }
