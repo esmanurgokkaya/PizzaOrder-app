@@ -1,5 +1,5 @@
-using System.Net.Http;
-using System.Net.Http.Json;
+using Microsoft.EntityFrameworkCore;
+using PizzaOrderApp.Data;
 using PizzaOrderApp.Models; 
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,46 +8,113 @@ using System;
 
 namespace PizzaOrderApp.Services 
 {
-    // Pizza verilerini yükleyen servis: `data/pizzas.json`'den menü verilerini getirir ve önbellekler.
+    // Pizza verilerini veritabanından yükleyen servis: Entity Framework ile veri erişimi.
     public class PizzaService
     {
-        private readonly HttpClient _httpClient;
-        private List<Pizza>? _pizzas;
+        private readonly PizzaStoreContext _context;
 
-        public PizzaService(HttpClient httpClient)
+        public PizzaService(PizzaStoreContext context)
         {
-            _httpClient = httpClient;
+            _context = context;
         }
 
-    // Menüdeki tüm pizzaları döner; iç önbellek varsa doğrudan onu kullanır.
-    public async Task<List<Pizza>> GetPizzasAsync()
+        // Veritabanındaki tüm pizzaları boyutları ile birlikte döner.
+        public async Task<List<Pizza>> GetPizzasAsync()
         {
-            if (_pizzas != null)
-            {
-                return _pizzas;
-            }
-
             try
             {
-                _pizzas = await _httpClient.GetFromJsonAsync<List<Pizza>>("data/pizzas.json");
+                return await _context.Pizzas
+                    .Include(p => p.Sizes)
+                    .ToListAsync();
             }
             catch (Exception ex) 
             {
                 Console.WriteLine($"Pizza verileri yüklenemedi: {ex.Message}");
-                _pizzas = new List<Pizza>();
+                return new List<Pizza>();
             }
-
-            return _pizzas ?? new List<Pizza>();
         }
 
-    // Verilen `id` ile önbellekteki pizzayı döndürür, önbellek boşsa önce tüm pizzaları yükler.
-    public async Task<Pizza?> GetPizzaByIdAsync(string id) 
+        // Verilen ID ile veritabanından pizza döndürür, boyutları ile birlikte.
+        public async Task<Pizza?> GetPizzaByIdAsync(string id) 
         {
-            if (_pizzas == null)
+            try
             {
-                await GetPizzasAsync();
+                return await _context.Pizzas
+                    .Include(p => p.Sizes)
+                    .FirstOrDefaultAsync(p => p.Id == id);
             }
-            return _pizzas?.FirstOrDefault(p => p.Id == id);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Pizza bulunamadı (ID: {id}): {ex.Message}");
+                return null;
+            }
+        }
+
+        // Yeni pizza ekler (admin fonksiyonu)
+        public async Task<bool> AddPizzaAsync(Pizza pizza)
+        {
+            try
+            {
+                _context.Pizzas.Add(pizza);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Pizza eklenemedi: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Pizza günceller (admin fonksiyonu)
+        public async Task<bool> UpdatePizzaAsync(Pizza pizza)
+        {
+            try
+            {
+                _context.Pizzas.Update(pizza);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Pizza güncellenemedi: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Pizza siler (admin fonksiyonu)
+        public async Task<bool> DeletePizzaAsync(string id)
+        {
+            try
+            {
+                var pizza = await GetPizzaByIdAsync(id);
+                if (pizza != null)
+                {
+                    _context.Pizzas.Remove(pizza);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Pizza silinemedi: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Pizza sayısını döner
+        public async Task<int> GetPizzaCountAsync()
+        {
+            try
+            {
+                return await _context.Pizzas.CountAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Pizza sayısı alınamadı: {ex.Message}");
+                return 0;
+            }
         }
     }
 }
