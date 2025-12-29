@@ -109,20 +109,48 @@ namespace PizzaOrderApp.Services
         {
             try
             {
-                // CustomerInfo'yu önce ekle
-                if (order.CustomerInfo.Id == 0)
+                Console.WriteLine("Sipariş veritabanına kaydediliyor...");
+                
+                // CustomerInfo'yu kontrol et - mevcut bir müşteri var mı?
+                CustomerInfo? existingCustomer = null;
+                if (!string.IsNullOrEmpty(order.CustomerInfo.Email))
                 {
-                    _context.CustomerInfos.Add(order.CustomerInfo);
-                    await _context.SaveChangesAsync();
+                    existingCustomer = await _context.CustomerInfos
+                        .FirstOrDefaultAsync(c => c.Email == order.CustomerInfo.Email);
+                }
+
+                if (existingCustomer != null)
+                {
+                    // Mevcut müşteri varsa onu kullan
+                    order.CustomerInfo = existingCustomer;
+                    order.CustomerInfoId = existingCustomer.Id;
+                    Console.WriteLine($"Mevcut müşteri kullanılıyor: {existingCustomer.Email}");
+                }
+                else
+                {
+                    // Yeni müşteri oluştur
+                    if (order.CustomerInfo.Id == 0)
+                    {
+                        _context.CustomerInfos.Add(order.CustomerInfo);
+                        await _context.SaveChangesAsync();
+                        order.CustomerInfoId = order.CustomerInfo.Id;
+                        Console.WriteLine($"Yeni müşteri oluşturuldu: {order.CustomerInfo.Email}");
+                    }
                 }
 
                 // Order'ı ekle
                 order.OrderDate = DateTime.Now;
-                order.CustomerInfoId = order.CustomerInfo.Id;
+                
+                // OrderNumber set edilmemişse otomatik generate et
+                if (string.IsNullOrEmpty(order.OrderNumber))
+                {
+                    order.OrderNumber = Guid.NewGuid().ToString("N")[..10].ToUpper();
+                }
                 
                 _context.Orders.Add(order);
                 await _context.SaveChangesAsync();
 
+                Console.WriteLine("Sipariş başarıyla kaydedildi!");
                 return true;
             }
             catch (Exception ex)
@@ -141,11 +169,24 @@ namespace PizzaOrderApp.Services
                 return false;
             }
 
-            // Foreign key'leri set et
-            CurrentOrder.SelectedPizzaId = CurrentOrder.SelectedPizza.Id;
-            CurrentOrder.SelectedSizeId = CurrentOrder.SelectedSize.Id;
+            // Yeni bir Order nesnesi oluştur (CurrentOrder'ı klonla)
+            var newOrder = new Order
+            {
+                // Id = 0 (yeni kayıt için default)
+                OrderNumber = Guid.NewGuid().ToString("N")[..10].ToUpper(), // Benzersiz sipariş numarası
+                SelectedPizzaId = CurrentOrder.SelectedPizza.Id,
+                SelectedSizeId = CurrentOrder.SelectedSize.Id,
+                SelectedToppings = CurrentOrder.SelectedToppings.ToList(), // JSON property otomatik set edilir
+                TotalPrice = CurrentOrder.TotalPrice,
+                CustomerInfo = new CustomerInfo
+                {
+                    Name = CurrentOrder.CustomerInfo.Name,
+                    Email = CurrentOrder.CustomerInfo.Email,
+                    Address = CurrentOrder.CustomerInfo.Address
+                }
+            };
 
-            return await PlaceOrderAsync(CurrentOrder);
+            return await PlaceOrderAsync(newOrder);
         }
 
         // Müşteri siparişlerini getir
