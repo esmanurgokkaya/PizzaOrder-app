@@ -1,5 +1,4 @@
 // Data/SeedData.cs
-
 using Microsoft.EntityFrameworkCore;
 using PizzaOrderApp.Models;
 using System.Text.Json;
@@ -12,18 +11,6 @@ namespace PizzaOrderApp.Data
         {
             try
             {
-                // Veritabanının oluşturulduğundan emin ol
-                await context.Database.EnsureCreatedAsync();
-                
-                // Migration'ların uygulandığından emin ol
-                var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
-                if (pendingMigrations.Any())
-                {
-                    logger.LogInformation("Pending migrations uygulanıyor: {Migrations}", 
-                        string.Join(", ", pendingMigrations));
-                    await context.Database.MigrateAsync();
-                }
-
                 // Eğer Pizzas tablosunda veri varsa seeding yapma
                 if (await context.Pizzas.AnyAsync())
                 {
@@ -45,7 +32,7 @@ namespace PizzaOrderApp.Data
                 // JSON dosyasını oku
                 var jsonContent = await File.ReadAllTextAsync(jsonFilePath);
                 
-                // JSON verilerini deserialize et - mevcut JSON formatına uygun model
+                // JSON verilerini deserialize et
                 var pizzaDataList = JsonSerializer.Deserialize<List<PizzaJsonModel>>(jsonContent, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -58,12 +45,8 @@ namespace PizzaOrderApp.Data
                 }
 
                 // Pizza'ları ve boyutlarını veritabanına ekle
-                var pizzasToAdd = new List<Pizza>();
-                var sizesToAdd = new List<PizzaSize>();
-
                 foreach (var pizzaData in pizzaDataList)
                 {
-                    // Pizza entity'si oluştur
                     var pizza = new Pizza
                     {
                         Id = pizzaData.Id,
@@ -73,7 +56,7 @@ namespace PizzaOrderApp.Data
                         Ingredients = pizzaData.Ingredients ?? new List<string>()
                     };
 
-                    pizzasToAdd.Add(pizza);
+                    context.Pizzas.Add(pizza);
 
                     // Pizza boyutlarını ekle
                     if (pizzaData.Sizes != null)
@@ -82,35 +65,28 @@ namespace PizzaOrderApp.Data
                         {
                             var pizzaSize = new PizzaSize
                             {
-                                Id = sizeData.Id,
+                                Id = $"{pizza.Id}_{sizeData.Name.ToLowerInvariant()}",
                                 Name = sizeData.Name,
                                 Multiplier = sizeData.Multiplier,
                                 PizzaId = pizza.Id
                             };
-                            sizesToAdd.Add(pizzaSize);
+                            context.PizzaSizes.Add(pizzaSize);
                         }
                     }
                 }
 
-                // Bulk insert operations
-                await context.Pizzas.AddRangeAsync(pizzasToAdd);
                 await context.SaveChangesAsync();
-
-                await context.PizzaSizes.AddRangeAsync(sizesToAdd);
-                await context.SaveChangesAsync();
-
-                logger.LogInformation("Seed data başarıyla yüklendi. {PizzaCount} pizza ve {SizeCount} boyut eklendi.",
-                    pizzasToAdd.Count, sizesToAdd.Count);
+                logger.LogInformation("Seed data başarıyla yüklendi.");
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Seed data yüklenirken hata oluştu.");
-                throw; // Re-throw to handle in Program.cs if needed
+                throw;
             }
         }
     }
 
-    // JSON dosyasından veri okumak için yardımcı model sınıfları
+    // JSON model sınıfları
     public class PizzaJsonModel
     {
         public string Id { get; set; } = string.Empty;

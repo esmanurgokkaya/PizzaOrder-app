@@ -11,7 +11,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 // 2. Veritabanı Bağlantısını Ekleyin (SQLite)
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=pizza.db";
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=PizzaDb.db";
 builder.Services.AddDbContext<PizzaStoreContext>(options =>
     options.UseSqlite(connectionString));
 
@@ -29,14 +29,21 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<PizzaStoreContext>();
-        // Veritabanını oluştur (Migration varsa uygular)
-        context.Database.EnsureCreated(); 
+        var environment = services.GetRequiredService<IWebHostEnvironment>();
+        var logger = services.GetRequiredService<ILogger<Program>>();
         
-        // Eğer Pizza tablosu boşsa başlangıç verisi ekle (İsteğe bağlı)
-        // Burada daha önce yazdığınız SeedData metodunu çağırabilirsiniz.
+        // Veritabanını oluştur
+        context.Database.EnsureCreated();
+        
+        // Seed data ekle
+        SeedData.InitializeAsync(context, environment, logger).Wait();
+        
+        logger.LogInformation("Veritabanı başarıyla oluşturuldu ve seed data yüklendi.");
     }
     catch (Exception ex)
     {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Veritabanı oluşturulurken hata: {Error}", ex.Message);
         Console.WriteLine("Veritabanı oluşturulurken hata: " + ex.Message);
     }
 }

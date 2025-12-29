@@ -50,8 +50,21 @@
         var orderNumber = $"PZ-{DateTime.Now.ToString("yyyyMMdd")}-{new Random().Next(1000, 9999)}";
         OrderService.CurrentOrder.OrderNumber = orderNumber;
 
-        await OrderService.SaveOrderToLocalStorageAsync();
-
-        NavManager.NavigateTo($"/confirmation/{orderNumber}");
+        // Veritabanına kaydet
+        Console.WriteLine("Sipariş veritabanına kaydediliyor...");
+        bool success = await OrderService.PlaceCurrentOrderAsync();
+        
+        if (success)
+        {
+            Console.WriteLine("Sipariş başarıyla veritabanına kaydedildi!");
+            await OrderService.SaveOrderToLocalStorageAsync();
+            NavManager.NavigateTo($"/confirmation/{orderNumber}");
+        }
+        else
+        {
+            Console.WriteLine("Sipariş kaydedilemedi!");
+            isSubmitting = false;
+            StateHasChanged();
+        }
     }
 }

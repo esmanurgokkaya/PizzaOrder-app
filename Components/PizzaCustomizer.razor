@@ -19,20 +19,31 @@ else
 
     <div class="card p-3 mb-4 shadow-sm">
         <h5 class="card-title">Boyut Seçimi</h5>
-        @* Boyutlar: her boyutun çarpan (fiyat için multiplier) bilgisi etiketlenir. *@
-        <div class="d-flex flex-wrap gap-3">
-             @foreach (var size in Pizza.Sizes)
-             {
-                 <div class="form-check form-check-inline">
-                     <input type="radio" id="size-@size.Id" name="pizzaSize" class="form-check-input"
-                            checked="@(OrderService.CurrentOrder.SelectedSize?.Id == size.Id)"
-                            @onclick="@(() => HandleSizeSelection(size))" />
-                     <label class="form-check-label" for="size-@size.Id">
-                         @size.Name <span class="text-muted small">(@(size.Multiplier.ToString("0.0"))x)</span>
-                     </label>
-                 </div>
-             }
-         </div>
+        
+        @if (Pizza.Sizes == null || !Pizza.Sizes.Any())
+        {
+            <div class="alert alert-warning">
+                <strong>Boyut yüklenmiyor!</strong> Bu pizza için boyut bilgileri bulunamadı.
+            </div>
+        }
+        else
+        {
+            @* Boyutlar: her boyutun çarpan (fiyat için multiplier) bilgisi etiketlenir. *@
+            <div class="d-flex flex-wrap gap-3">
+                 @foreach (var size in Pizza.Sizes)
+                 {
+                     <div class="form-check form-check-inline">
+                         <input type="radio" id="size-@size.Id" name="pizzaSize" class="form-check-input"
+                                checked="@(OrderService.CurrentOrder.SelectedSize?.Id == size.Id)"
+                                @onclick="@(() => HandleSizeSelection(size))" />
+                         <label class="form-check-label" for="size-@size.Id">
+                             @size.Name <span class="text-muted small">(@(size.Multiplier.ToString("0.0"))x)</span>
+                         </label>
+                     </div>
+                 }
+             </div>
+        }
+        
          @if (OrderService.CurrentOrder.SelectedSize == null)
          { <div class="alert alert-danger mt-2 p-2 small">Lütfen bir boyut seçimi yapınız.</div> }
     </div>
@@ -87,13 +98,14 @@ else
             OrderService.CurrentOrder.SelectedToppings.Clear();
             removedIngredients.Clear();
 
-            OrderService.CurrentOrder.SelectedSize = Pizza.Sizes.FirstOrDefault();
+            // En küçük boyutu (multiplier'ı en düşük) varsayılan seç
+            OrderService.CurrentOrder.SelectedSize = Pizza.Sizes.OrderBy(s => s.Multiplier).FirstOrDefault();
 
             OrderService.UpdateOrder(); 
         }
         else if (Pizza != null && OrderService.CurrentOrder.SelectedPizza?.Id == Pizza.Id && OrderService.CurrentOrder.SelectedSize == null && Pizza.Sizes.Any())
         {
-             OrderService.CurrentOrder.SelectedSize = Pizza.Sizes.First();
+             OrderService.CurrentOrder.SelectedSize = Pizza.Sizes.OrderBy(s => s.Multiplier).First();
              OrderService.UpdateOrder();
         }
     }
@@ -112,10 +124,33 @@ else
 
     private void ToggleExtraTopping(string topping, bool isChecked)
     {
-        bool alreadySelected = OrderService.CurrentOrder.SelectedToppings.Contains(topping);
+        Console.WriteLine($"ToggleExtraTopping çağrıldı: {topping}, checked={isChecked}");
+        
+        // Mevcut listeyi al
+        var currentToppings = OrderService.CurrentOrder.SelectedToppings;
+        bool alreadySelected = currentToppings.Contains(topping);
+        Console.WriteLine($"Already selected: {alreadySelected}");
+        Console.WriteLine($"Current toppings: [{string.Join(", ", currentToppings)}]");
+        
         if (isChecked && !alreadySelected)
-        { OrderService.CurrentOrder.SelectedToppings.Add(topping); OrderService.UpdateOrder(); }
+        { 
+            currentToppings.Add(topping);
+            // Listeyi geri ata (JSON'a serialize et)
+            OrderService.CurrentOrder.SelectedToppings = currentToppings;
+            Console.WriteLine($"AFTER Add - Toppings: [{string.Join(", ", OrderService.CurrentOrder.SelectedToppings)}]");
+            Console.WriteLine($"AFTER Add - Count: {OrderService.CurrentOrder.SelectedToppings.Count}");
+            OrderService.UpdateOrder();
+            StateHasChanged(); // UI güncellemesi için
+        }
         else if (!isChecked && alreadySelected)
-        { OrderService.CurrentOrder.SelectedToppings.Remove(topping); OrderService.UpdateOrder(); }
+        { 
+            currentToppings.Remove(topping);
+            // Listeyi geri ata (JSON'a serialize et)
+            OrderService.CurrentOrder.SelectedToppings = currentToppings;
+            Console.WriteLine($"AFTER Remove - Toppings: [{string.Join(", ", OrderService.CurrentOrder.SelectedToppings)}]");
+            Console.WriteLine($"AFTER Remove - Count: {OrderService.CurrentOrder.SelectedToppings.Count}");
+            OrderService.UpdateOrder();
+            StateHasChanged(); // UI güncellemesi için
+        }
     }
 }

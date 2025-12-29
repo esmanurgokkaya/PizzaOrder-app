@@ -30,6 +30,7 @@ namespace PizzaOrderApp.Services
         // Sipariş değiştiğinde fiyatı yeniden hesaplar ve abonelere bildirir.
         public void UpdateOrder()
         {
+            Console.WriteLine("UpdateOrder çağrıldı");
             CalculatePrice();
             NotifyStateChanged();
         }
@@ -48,6 +49,9 @@ namespace PizzaOrderApp.Services
             int extraToppingsCount = CurrentOrder.SelectedToppings.Count;
             decimal toppingsCost = extraToppingsCount * ExtraToppingPrice;
             CurrentOrder.TotalPrice = (basePrice * (decimal)multiplier) + toppingsCost;
+            
+            // Debug log
+            Console.WriteLine($"Fiyat hesaplaması: BasePrice={basePrice}, Multiplier={multiplier}, ToppingsCount={extraToppingsCount}, ToppingsCost={toppingsCost}, Total={CurrentOrder.TotalPrice}");
         }
 
         // `OnOrderStateChanged` olayını tetikler (UI ve diğer aboneler için güncelleme bildirimi).
@@ -136,6 +140,10 @@ namespace PizzaOrderApp.Services
                 Console.WriteLine("Eksik sipariş bilgileri.");
                 return false;
             }
+
+            // Foreign key'leri set et
+            CurrentOrder.SelectedPizzaId = CurrentOrder.SelectedPizza.Id;
+            CurrentOrder.SelectedSizeId = CurrentOrder.SelectedSize.Id;
 
             return await PlaceOrderAsync(CurrentOrder);
         }
