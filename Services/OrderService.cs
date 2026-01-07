@@ -14,7 +14,7 @@ namespace PizzaOrderApp.Services
     // Sipariş durumunu yöneten servis: seçim, fiyat hesaplama, yerel depolama ve veritabanı işlemleri.
     public class OrderService
     {
-        // IJSRuntime ile localStorage erişimi sağlar (JS interop için constructor'ta alınır).
+
         private const decimal ExtraToppingPrice = 10.00m;
         public Order CurrentOrder { get; private set; } = new Order();
         public event Action? OnOrderStateChanged;
@@ -50,17 +50,16 @@ namespace PizzaOrderApp.Services
             decimal toppingsCost = extraToppingsCount * ExtraToppingPrice;
             CurrentOrder.TotalPrice = (basePrice * (decimal)multiplier) + toppingsCost;
             
-            // Debug log
+          
             Console.WriteLine($"Fiyat hesaplaması: BasePrice={basePrice}, Multiplier={multiplier}, ToppingsCount={extraToppingsCount}, ToppingsCost={toppingsCost}, Total={CurrentOrder.TotalPrice}");
         }
 
-        // `OnOrderStateChanged` olayını tetikler (UI ve diğer aboneler için güncelleme bildirimi).
+        
         private void NotifyStateChanged()
         {
             OnOrderStateChanged?.Invoke();
         }
 
-    // Mevcut siparişi JSON olarak localStorage'a kaydeder (JS interop kullanır).
     public async Task SaveOrderToLocalStorageAsync()
         {
             if (_jsRuntime == null)
@@ -79,8 +78,7 @@ namespace PizzaOrderApp.Services
                  Console.WriteLine($"LocalStorage'a kaydetme hatası: {ex.Message}");
             }
         }
-    // LocalStorage'dan 'lastCompletedOrder' anahtarını okuyup `CurrentOrder`'ı yükler.
-    // Başarısız olursa boş bir sipariş ile devam eder.
+  
     public async Task LoadLastOrderFromLocalStorageAsync()
         {
             if (_jsRuntime == null)
@@ -111,7 +109,6 @@ namespace PizzaOrderApp.Services
             {
                 Console.WriteLine("Sipariş veritabanına kaydediliyor...");
                 
-                // CustomerInfo'yu kontrol et - mevcut bir müşteri var mı?
                 CustomerInfo? existingCustomer = null;
                 if (!string.IsNullOrEmpty(order.CustomerInfo.Email))
                 {
@@ -141,7 +138,6 @@ namespace PizzaOrderApp.Services
                 // Order'ı ekle
                 order.OrderDate = DateTime.Now;
                 
-                // OrderNumber set edilmemişse otomatik generate et
                 if (string.IsNullOrEmpty(order.OrderNumber))
                 {
                     order.OrderNumber = Guid.NewGuid().ToString("N")[..10].ToUpper();
@@ -169,14 +165,12 @@ namespace PizzaOrderApp.Services
                 return false;
             }
 
-            // Yeni bir Order nesnesi oluştur (CurrentOrder'ı klonla)
             var newOrder = new Order
             {
-                // Id = 0 (yeni kayıt için default)
                 OrderNumber = Guid.NewGuid().ToString("N")[..10].ToUpper(), // Benzersiz sipariş numarası
                 SelectedPizzaId = CurrentOrder.SelectedPizza.Id,
                 SelectedSizeId = CurrentOrder.SelectedSize.Id,
-                SelectedToppings = CurrentOrder.SelectedToppings.ToList(), // JSON property otomatik set edilir
+                SelectedToppings = CurrentOrder.SelectedToppings.ToList(), 
                 TotalPrice = CurrentOrder.TotalPrice,
                 CustomerInfo = new CustomerInfo
                 {
@@ -227,7 +221,7 @@ namespace PizzaOrderApp.Services
             }
         }
 
-        // Tüm siparişleri getir (admin fonksiyonu)
+        // Tüm siparişleri getir 
         public async Task<List<Order>> GetAllOrdersAsync()
         {
             try

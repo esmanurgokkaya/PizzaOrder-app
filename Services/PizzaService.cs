@@ -50,7 +50,7 @@ namespace PizzaOrderApp.Services
             }
         }
 
-        // Yeni pizza ekler (admin fonksiyonu)
+        // Yeni pizza ekler
         public async Task<bool> AddPizzaAsync(Pizza pizza)
         {
             try
@@ -66,7 +66,7 @@ namespace PizzaOrderApp.Services
             }
         }
 
-        // Pizza günceller (admin fonksiyonu)
+        // Pizza günceller 
         public async Task<bool> UpdatePizzaAsync(Pizza pizza)
         {
             try
@@ -82,7 +82,7 @@ namespace PizzaOrderApp.Services
             }
         }
 
-        // Pizza siler (admin fonksiyonu)
+        // Pizza siler 
         public async Task<bool> DeletePizzaAsync(string id)
         {
             try
