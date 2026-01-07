@@ -1,5 +1,3 @@
-// Models/Order.cs
-
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,7 +5,7 @@ using System.Text.Json;
 
 namespace PizzaOrderApp.Models
 {
-    // Bir siparişin seçili pizza, boyut, ekstra malzemeler ve toplam tutarını tutar.
+    // Bir siparişin seçili pizza, boyut, ekstra malzemeler ve toplam tutarını tutar
     public class Order
     {
         [Key]
@@ -29,20 +27,17 @@ namespace PizzaOrderApp.Models
         
         public DateTime OrderDate { get; set; } = DateTime.Now;
         
-        // Navigation properties
         [ForeignKey("SelectedPizzaId")]
         public virtual Pizza? SelectedPizza { get; set; }
         
         [ForeignKey("SelectedSizeId")]
         public virtual PizzaSize? SelectedSize { get; set; }
         
-        // Müşteri bilgileri - ayrı tablo olarak
         public int CustomerInfoId { get; set; }
         
         [ForeignKey("CustomerInfoId")]
         public virtual CustomerInfo CustomerInfo { get; set; } = new();
         
-        // NotMapped property - veritabanında saklanmaz
         [NotMapped]
         public List<string> SelectedToppings
         {

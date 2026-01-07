@@ -1,11 +1,9 @@
-// Models/PizzaSize.cs
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PizzaOrderApp.Models
 {
-    // Pizza boyutu ve fiyat çarpanını tutar (ör. Small, Medium, Large).
+    // Pizza boyutu ve fiyat çarpanını tutar
     public class PizzaSize
     {
         [Key]
@@ -22,11 +20,9 @@ namespace PizzaOrderApp.Models
         [Required]
         public string PizzaId { get; set; } = string.Empty;
         
-        // Navigation property
         [ForeignKey("PizzaId")]
         public virtual Pizza? Pizza { get; set; }
         
-        // Navigation property - Order ile ilişki
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

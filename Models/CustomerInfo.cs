@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PizzaOrderApp.Models
 {
-    // Müşteri bilgilerini tutar: isim, e-posta ve teslimat adresi.
+    // Müşteri bilgilerini tutar:
     public class CustomerInfo
     {
         [Key]
@@ -25,7 +25,6 @@ namespace PizzaOrderApp.Models
         
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         
-        // Navigation property - Order ile ilişki
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

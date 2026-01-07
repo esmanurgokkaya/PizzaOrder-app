@@ -1,4 +1,3 @@
-// Data/SeedData.cs
 using Microsoft.EntityFrameworkCore;
 using PizzaOrderApp.Models;
 using System.Text.Json;
@@ -32,7 +31,6 @@ namespace PizzaOrderApp.Data
                 // JSON dosyasını oku
                 var jsonContent = await File.ReadAllTextAsync(jsonFilePath);
                 
-                // JSON verilerini deserialize et
                 var pizzaDataList = JsonSerializer.Deserialize<List<PizzaJsonModel>>(jsonContent, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true

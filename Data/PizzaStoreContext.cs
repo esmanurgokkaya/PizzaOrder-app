@@ -1,5 +1,3 @@
-// Data/PizzaStoreContext.cs
-
 using Microsoft.EntityFrameworkCore;
 using PizzaOrderApp.Models;
 
@@ -69,7 +67,6 @@ namespace PizzaOrderApp.Data
                 entity.Property(o => o.SelectedToppingsJson).HasDefaultValue("[]");
                 entity.Property(o => o.OrderDate).IsRequired();
                 
-                // Unique constraint for OrderNumber
                 entity.HasIndex(o => o.OrderNumber).IsUnique();
                 
                 // Order -> CustomerInfo ilişkisi (N:1)
@@ -88,7 +85,6 @@ namespace PizzaOrderApp.Data
                 entity.Property(c => c.Address).HasMaxLength(250).IsRequired();
                 entity.Property(c => c.CreatedDate).IsRequired();
                 
-                // Email unique constraint (opsiyonel)
                 entity.HasIndex(c => c.Email).IsUnique();
             });
         }
@@ -97,7 +93,6 @@ namespace PizzaOrderApp.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // Fallback connection string - normalde Program.cs'de yapılandırılır
                 optionsBuilder.UseSqlite("Data Source=pizzastore.db");
             }
         }

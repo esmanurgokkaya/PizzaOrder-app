@@ -6,22 +6,22 @@ using PizzaOrderApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Blazor Server ve Razor Pages servislerini ekleyin
+// Blazor Server ve Razor Pages servisleri
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-// 2. Veritabanı Bağlantısını Ekleyin (SQLite)
+// Veritabanı Bağlantısı
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=PizzaDb.db";
 builder.Services.AddDbContext<PizzaStoreContext>(options =>
     options.UseSqlite(connectionString));
 
-// 3. Kendi Servislerinizi Ekleyin
+// Proje Servisleri
 builder.Services.AddScoped<PizzaService>();
 builder.Services.AddScoped<OrderService>();
 
 var app = builder.Build();
 
-// 4. Veritabanı Otomatik Oluşturma (Seed Data)
+// Veritabanı Otomatik Oluşturma 
 // Uygulama her açıldığında veritabanı yoksa oluşturur.
 using (var scope = app.Services.CreateScope())
 {
@@ -58,7 +58,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-// 5. Blazor Server Rotalarını Ayarlayın
+// Blazor Server Rotaları
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

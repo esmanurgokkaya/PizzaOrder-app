@@ -1,12 +1,10 @@
-// Models/Pizza.cs
-
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace PizzaOrderApp.Models
 {
-    // Menüdeki bir pizzayı tanımlar: ad, temel fiyat, malzemeler ve desteklenen boyutlar.
+    // Menüdeki bir pizzayı tanımlar
     public class Pizza
     {
         [Key]
@@ -25,7 +23,6 @@ namespace PizzaOrderApp.Models
         // JSON olarak saklanacak malzemeler listesi
         public string IngredientsJson { get; set; } = "[]";
         
-        // Navigation property - veritabanında saklanmaz
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public List<string> Ingredients
         {
@@ -33,10 +30,8 @@ namespace PizzaOrderApp.Models
             set => IngredientsJson = JsonSerializer.Serialize(value);
         }
         
-        // Navigation property - PizzaSize ile ilişki
         public virtual ICollection<PizzaSize> Sizes { get; set; } = new List<PizzaSize>();
         
-        // Navigation property - Order ile ilişki
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }
